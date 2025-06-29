@@ -169,11 +169,12 @@ export class PatientsService {
 		}
 	}
 
-	async getStatusHistory(id: string): Promise<StatusHistory[]> {
-		// Verificar que el paciente existe
-		await this.findOne(id)
+	async getStatusHistory(id: string): Promise<{ patient: Patient; history: StatusHistory[] }> {
+		// Obtener el paciente con su información completa
+		const patient = await this.findOne(id)
 
-		return await this.prisma.statusHistory.findMany({
+		// Obtener el historial de estados
+		const history = await this.prisma.statusHistory.findMany({
 			where: { patient_id: id },
 			include: {
 				status: {
@@ -187,6 +188,11 @@ export class PatientsService {
 				changed_at: 'desc'
 			}
 		})
+
+		return {
+			patient,
+			history
+		}
 	}
 
 	async getPatientsByProvider(providerId: string): Promise<Patient[]> {

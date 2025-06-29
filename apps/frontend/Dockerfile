@@ -1,8 +1,8 @@
 # Multi-stage build for Next.js Frontend
 FROM oven/bun:1-alpine AS base
 
-# Instalar dependencias necesarias
-RUN apk add --no-cache libc6-compat
+# Instalar dependencias necesarias y npm
+RUN apk add --no-cache libc6-compat nodejs npm
 
 # Set working directory
 WORKDIR /app

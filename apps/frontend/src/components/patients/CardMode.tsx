@@ -5,8 +5,8 @@ import { getStatusBadgeColor } from 'src/lib/getStatusBadgeColor';
 
 interface Iprops {
 	patients: Patient[];
-	statuses: Status[];
-	handleStatusUpdate: (patientId: string, newStatusId: string) => void;
+	statuses?: Status[];
+	handleStatusUpdate?: (patientId: string, newStatusId: string) => void;
 }
 
 const CardMode: React.FC<Iprops> = ({ patients }) => {

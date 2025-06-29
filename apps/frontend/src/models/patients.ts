@@ -11,6 +11,8 @@ export interface Patient {
 	// Relaciones incluidas en la respuesta del backend
 	provider: Provider;
 	status: Status;
+	// Historial de estados (opcional, solo incluido en respuestas individuales)
+	status_history?: StatusHistory[];
 }
 
 export interface CreatePatientFormData {
@@ -18,6 +20,7 @@ export interface CreatePatientFormData {
 	email: string;
 	phone: string;
 	provider_id: string;
+	status_id: string;
 }
 
 export interface StatusHistory {
@@ -29,7 +32,13 @@ export interface StatusHistory {
 	status: Status;
 }
 
+export interface PatientStatusHistoryResponse {
+	patient: Patient;
+	history: StatusHistory[];
+}
+
 // Interfaces para las respuestas de la API
 export type PatientApiResponse = ApiResponse<Patient>;
 export type PatientsApiResponse = ApiResponse<Patient[]>;
 export type StatusHistoryApiResponse = ApiResponse<StatusHistory[]>;
+export type PatientStatusHistoryApiResponse = ApiResponse<PatientStatusHistoryResponse>;

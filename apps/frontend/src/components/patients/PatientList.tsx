@@ -1,9 +1,32 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useApi } from 'src/hooks';
+import { PatientsApiResponse } from 'src/models';
+import { getAllPatients } from 'src/services/patientsService';
+import { CardMode } from './CardMode';
+import { EmptyPatients } from './EmptyPatients';
+import { TableMode } from './TableMode';
 
 const PatientList = () => {
 	const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+	const { data, loading, error } = useApi<PatientsApiResponse, undefined>(getAllPatients, {
+		autoFetch: true,
+		params: undefined
+	});
+
+	if (loading) {
+		return (
+			<section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+				<div className="text-center">
+					<div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
+					<p className="mt-4 text-gray-600">Loading patients...</p>
+				</div>
+			</section>
+		);
+	}
+
+	if (error) return <div>Error: {error.message}</div>;
 
 	return (
 		<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -45,11 +68,13 @@ const PatientList = () => {
 					</div>
 				</div>
 
-				{viewMode === 'table' ? <p></p> : <p></p>}
+				{viewMode === 'table' ? (
+					<TableMode patients={data?.data || []} />
+				) : (
+					<CardMode patients={data?.data || []} />
+				)}
 
-				{/* {patients.length === 0 && (
-           
-          )} */}
+				{data?.data?.length === 0 && <EmptyPatients />}
 			</div>
 		</main>
 	);

@@ -1,5 +1,5 @@
-import { CreatePatientForm } from 'src/components';
+import { CreatePatientForm } from 'src/components/patients';
 
-export default function Home() {
+export default function NewPatient() {
 	return <CreatePatientForm />;
 }

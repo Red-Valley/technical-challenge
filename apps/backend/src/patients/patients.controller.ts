@@ -70,7 +70,7 @@ export class PatientsController {
 
 	@Get(':id/status-history')
 	async getStatusHistory(@Param('id') id: string): Promise<ApiResponse> {
-		const history = await this.patientsService.getStatusHistory(id)
-		return createRetrievedListResponse('Patient status history', history)
+		const result = await this.patientsService.getStatusHistory(id)
+		return createRetrievedResponse('Patient status history', result)
 	}
 }

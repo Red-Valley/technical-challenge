@@ -3,15 +3,21 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { CreatePatientFormData } from 'src/models';
+import { useApi } from 'src/hooks';
+import { CreatePatientFormData, PatientApiResponse } from 'src/models';
+import { createPatient } from 'src/services/patientsService';
 
 const CreatePatientForm: React.FC = () => {
 	const router = useRouter();
+
+	const { fetch, loading } = useApi<PatientApiResponse, CreatePatientFormData>(createPatient);
+
 	const initialValues: CreatePatientFormData = {
 		full_name: '',
 		email: '',
 		phone: '',
-		provider_id: ''
+		provider_id: '1cbadd6e-bee1-45d9-a079-99a2194504fd',
+		status_id: 'cbac48d5-1132-4ff8-a0f4-036d41272e89'
 	};
 
 	const validationSchema = Yup.object({
@@ -22,8 +28,14 @@ const CreatePatientForm: React.FC = () => {
 	});
 
 	const handleSubmit = async (values: CreatePatientFormData) => {
-		// TODO: Implement the create patient logic
-		console.log(values);
+		try {
+			const data = await fetch(values);
+			if (data?.data) {
+				router.push(`/`);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -150,16 +162,16 @@ const CreatePatientForm: React.FC = () => {
 									type="button"
 									onClick={() => router.push('/')}
 									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-									disabled={isSubmitting}
+									disabled={isSubmitting || loading}
 								>
 									Cancel
 								</button>
 								<button
 									type="submit"
 									className="rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-									disabled={isSubmitting}
+									disabled={isSubmitting || loading}
 								>
-									{isSubmitting ? 'Creating...' : 'Create Patient'}
+									{isSubmitting || loading ? 'Creating...' : 'Create Patient'}
 								</button>
 							</div>
 						</Form>
