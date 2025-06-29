@@ -1,6 +1,5 @@
-// Eliminar o comentar la línea donde se declara CreatePatientForm si no se usa.
-// import { CreatePatientForm } from 'src/components/CreatePatientForm';
+import { PatientList } from 'src/components';
 
 export default function Home() {
-	return <main>hola</main>;
+	return <PatientList />;
 }

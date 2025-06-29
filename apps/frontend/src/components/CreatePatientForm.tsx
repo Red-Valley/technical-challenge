@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { CreatePatientFormData } from 'src/models';
 
 const CreatePatientForm: React.FC = () => {
+	const router = useRouter();
 	const initialValues: CreatePatientFormData = {
 		full_name: '',
 		email: '',
@@ -146,7 +148,7 @@ const CreatePatientForm: React.FC = () => {
 							<div className="flex justify-end space-x-3 border-t border-gray-200 pt-6">
 								<button
 									type="button"
-									onClick={() => {}}
+									onClick={() => router.push('/')}
 									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
 									disabled={isSubmitting}
 								>

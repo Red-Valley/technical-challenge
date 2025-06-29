@@ -32,7 +32,7 @@ export const NavBar: React.FC = () => {
 							>
 								Patients
 							</Link>
-							<a
+							<Link
 								href="/providers"
 								className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
 									isActive('/providers')
@@ -41,7 +41,7 @@ export const NavBar: React.FC = () => {
 								}`}
 							>
 								Providers
-							</a>
+							</Link>
 						</div>
 					</div>
 
