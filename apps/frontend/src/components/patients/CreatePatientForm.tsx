@@ -3,33 +3,40 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useStatusProvider } from 'src/context/StatusProviderContext';
 import { useApi } from 'src/hooks';
 import { CreatePatientFormData, PatientApiResponse } from 'src/models';
 import { createPatient } from 'src/services/patientsService';
 
 const CreatePatientForm: React.FC = () => {
 	const router = useRouter();
+	const { providers, loading: contextLoading, statuses } = useStatusProvider();
 
-	const { fetch, loading } = useApi<PatientApiResponse, CreatePatientFormData>(createPatient);
+	const { fetch, loading, error } = useApi<PatientApiResponse, CreatePatientFormData>(
+		createPatient
+	);
 
 	const initialValues: CreatePatientFormData = {
 		full_name: '',
 		email: '',
 		phone: '',
-		provider_id: '1cbadd6e-bee1-45d9-a079-99a2194504fd',
-		status_id: 'cbac48d5-1132-4ff8-a0f4-036d41272e89'
+		provider_id: '',
+		status_id: ''
 	};
 
 	const validationSchema = Yup.object({
 		full_name: Yup.string().required('Full name is required'),
 		email: Yup.string().email('Invalid email address').required('Email is required'),
-		phone: Yup.string().required('Phone is required'),
+		phone: Yup.string().required('Phone is required').min(10, 'Phone must be at least 10 digits'),
 		provider_id: Yup.string().required('Provider is required')
 	});
 
 	const handleSubmit = async (values: CreatePatientFormData) => {
 		try {
-			const data = await fetch(values);
+			const data = await fetch({
+				...values,
+				status_id: statuses.find(status => status.name === 'Scheduled')?.id ?? ''
+			});
 			if (data?.data) {
 				router.push(`/`);
 			}
@@ -37,7 +44,7 @@ const CreatePatientForm: React.FC = () => {
 			console.log(error);
 		}
 	};
-
+	console.log(error);
 	return (
 		<section className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
 			<div className="rounded-lg bg-white shadow-sm">
@@ -124,14 +131,20 @@ const CreatePatientForm: React.FC = () => {
 									className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none ${
 										errors.provider_id ? 'border-red-300' : 'border-gray-300'
 									}`}
-									disabled={isSubmitting}
+									disabled={isSubmitting || contextLoading}
 								>
 									<option value="">Choose a provider...</option>
-									{/* {providers.map((provider) => (
-                    <option key={provider.id} value={provider.id}>
-                      {provider.full_name} - {provider.specialty}
-                    </option>
-                  ))} */}
+									{contextLoading ? (
+										<option value="" disabled>
+											Loading providers...
+										</option>
+									) : (
+										providers.map(provider => (
+											<option key={provider.id} value={provider.id}>
+												{provider.full_name} - {provider.specialty}
+											</option>
+										))
+									)}
 								</Field>
 								{errors.provider_id && touched.provider_id && (
 									<p className="mt-1 text-sm text-red-600">{errors.provider_id}</p>
@@ -162,14 +175,14 @@ const CreatePatientForm: React.FC = () => {
 									type="button"
 									onClick={() => router.push('/')}
 									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-									disabled={isSubmitting || loading}
+									disabled={isSubmitting || loading || contextLoading}
 								>
 									Cancel
 								</button>
 								<button
 									type="submit"
 									className="rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-									disabled={isSubmitting || loading}
+									disabled={isSubmitting || loading || contextLoading}
 								>
 									{isSubmitting || loading ? 'Creating...' : 'Create Patient'}
 								</button>

@@ -1,11 +1,12 @@
 import HistoryPage from 'src/components/patients/HistoryPage';
 
 interface PatientHistoryPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 export default async function PatientHistoryPage({ params }: PatientHistoryPageProps) {
-	return <HistoryPage id={params.id} />;
+	const { id } = await params;
+	return <HistoryPage id={id} />;
 }

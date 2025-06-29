@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { NavBar } from 'src/components';
+import { StatusProviderProvider } from 'src/context/StatusProviderContext';
 import 'src/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -16,8 +17,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<NavBar />
-				{children}
+				<StatusProviderProvider>
+					<NavBar />
+					{children}
+				</StatusProviderProvider>
 			</body>
 		</html>
 	);
