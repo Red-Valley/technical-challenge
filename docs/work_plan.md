@@ -39,22 +39,22 @@ technical-challenge/
 ### 1.1 Estructura del Monorepo
 - [x] Crear estructura de carpetas del monorepo ✅ **USANDO TURBOREPO**
 - [x] Configurar `.gitignore` global ✅
-- [ ] Configurar variables de entorno compartidas ❌
+- [x] Configurar variables de entorno compartidas ✅ **IMPLEMENTADO CON .env**
 - [x] **Configurar Linters Root** ✅ **IMPLEMENTADO**:
   - [x] Configuración global de Prettier ✅
   - [ ] EditorConfig para consistencia de editor ❌
   - [x] Scripts de linting a nivel monorepo ✅
   - [ ] Lint-staged para optimizar pre-commit ❌
 
-### 1.2 Configuración de Docker ❌ **NO IMPLEMENTADO**
-- [ ] **Dockerfile** para backend (NestJS) ❌
-- [ ] **Dockerfile** para frontend (Next.js) ❌ **CAMBIO: Next.js en lugar de React+Vite**
-- [ ] **docker-compose.yml** con servicios ❌:
-  - `postgres` (base de datos)
-  - `backend` (API NestJS)
-  - `frontend` (Next.js app)
-  - `adminer` (opcional, para gestión de BD)
-- [ ] Scripts de desarrollo y producción ❌
+### 1.2 Configuración de Docker ✅ **IMPLEMENTADO COMPLETAMENTE**
+- [x] **Dockerfile** para backend (NestJS) ✅ **CON IMAGEN OFICIAL BUN**
+- [x] **Dockerfile** para frontend (Next.js) ✅ **CON IMAGEN OFICIAL BUN**
+- [x] **docker-compose.yml** con servicios ✅:
+  - `postgres` (base de datos PostgreSQL 16) ✅
+  - `backend` (API NestJS con hot reload) ✅
+  - `frontend` (Next.js app con hot reload) ✅
+  - `adminer` (gestión de BD con interfaz web) ✅
+- [x] Scripts de desarrollo y producción ✅ **CON SCRIPT DE CONVENIENCIA**
 
 ### 1.3 Configuración del Backend ✅ **IMPLEMENTADO BÁSICO**
 - [x] Inicializar proyecto NestJS en `/apps/backend` ✅
@@ -209,13 +209,13 @@ technical-challenge/
 
 ---
 
-## 📌 Fase 6: Documentación y Optimización Docker ❌ **NO IMPLEMENTADO**
+## 📌 Fase 6: Documentación y Optimización Docker ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-### 6.1 Optimización de Docker
-- [ ] Multi-stage builds para optimizar imágenes ❌
-- [ ] Health checks para servicios ❌
-- [ ] Volúmenes para persistencia de datos ❌
-- [ ] Scripts de conveniencia (`npm run dev`, `npm run prod`) ❌
+### 6.1 Optimización de Docker ✅ **COMPLETADO**
+- [x] Multi-stage builds para optimizar imágenes ✅ **DESARROLLO Y PRODUCCIÓN**
+- [x] Health checks para servicios ✅ **POSTGRESQL CON VERIFICACIÓN**
+- [x] Volúmenes para persistencia de datos ✅ **POSTGRES_DATA Y HOT RELOAD**
+- [x] Scripts de conveniencia ✅ **DOCKER-SCRIPTS.SH CON TODOS LOS COMANDOS**
 
 ### 6.2 Documentación
 - [x] **README.md** básico ✅ **GENÉRICO DE TURBOREPO**
@@ -240,20 +240,24 @@ technical-challenge/
 - Configuraciones compartidas de ESLint y TypeScript
 - Scripts de desarrollo y build
 - Componentes básicos de UI
+- **🐳 Configuración Docker completa con hot reload**
+- **🗄️ Base de datos PostgreSQL 16 funcionando**
+- **🔧 Adminer para gestión de BD**
+- **📝 Variables de entorno configuradas**
+- **🚀 Scripts de conveniencia (docker-scripts.sh)**
 
 ### ❌ **PENDIENTE:**
-- Configuración completa de Docker
-- Base de datos PostgreSQL y entidades
+- Entidades TypeORM y migraciones
 - APIs REST del backend
 - Funcionalidades de gestión de pacientes
 - Integración frontend-backend
-- Variables de entorno
 - Documentación específica del proyecto
 
 ---
 
 ## 🐳 Comandos Actuales Disponibles
 
+### **Desarrollo Nativo (Bun):**
 ```bash
 # Desarrollo
 bun dev                    # Ejecutar ambas apps
@@ -268,6 +272,36 @@ bun lint                  # Lint todas las apps
 bun format                # Format código
 bun check-types          # Verificar tipos TypeScript
 ```
+
+### **Desarrollo con Docker (Recomendado):**
+```bash
+# Comandos principales
+./docker-scripts.sh dev           # Iniciar todos los servicios
+./docker-scripts.sh build         # Construir imágenes
+./docker-scripts.sh stop          # Detener servicios
+./docker-scripts.sh restart       # Reiniciar servicios
+./docker-scripts.sh clean         # Limpiar todo
+
+# Monitoreo
+./docker-scripts.sh status        # Ver estado de servicios
+./docker-scripts.sh logs          # Ver todos los logs
+./docker-scripts.sh logs-backend  # Solo logs backend
+./docker-scripts.sh logs-frontend # Solo logs frontend
+./docker-scripts.sh logs-db       # Solo logs base de datos
+
+# Acceso a shells
+./docker-scripts.sh shell-backend  # Terminal en backend
+./docker-scripts.sh shell-frontend # Terminal en frontend
+./docker-scripts.sh shell-db       # Terminal en PostgreSQL
+
+# Gestión de BD
+./docker-scripts.sh db-reset       # ⚠️  Reiniciar base de datos
+```
+
+### **URLs de Servicios:**
+- 🌐 **Frontend**: http://localhost:3001
+- 🔌 **Backend API**: http://localhost:3000
+- 🗄️ **Adminer (BD)**: http://localhost:8080
 
 ---
 
@@ -312,9 +346,9 @@ bun check-types          # Verificar tipos TypeScript
 - [x] Routing con Next.js ✅
 
 **DevOps:**
-- [ ] Docker & Docker Compose ❌
-- [ ] Multi-stage builds ❌
-- [ ] Environment variables ❌
+- [x] Docker & Docker Compose ✅ **FUNCIONANDO CON HOT RELOAD**
+- [x] Multi-stage builds ✅ **DESARROLLO Y PRODUCCIÓN**
+- [x] Environment variables ✅ **CONFIGURADAS CON .env**
 
 **Monorepo:**
 - [x] TurboRepo ✅ **CAMBIO: TurboRepo en lugar de estructura simple**
@@ -324,13 +358,13 @@ bun check-types          # Verificar tipos TypeScript
 
 ## 📝 Próximos Pasos Recomendados
 
-1. **Implementar configuración de Docker** (docker-compose.yml, Dockerfiles)
-2. **Configurar base de datos PostgreSQL** y entidades TypeORM
-3. **Desarrollar APIs REST** en el backend
+1. ~~**Implementar configuración de Docker**~~ ✅ **COMPLETADO**
+2. **Configurar entidades TypeORM** y migraciones de base de datos
+3. **Desarrollar APIs REST** en el backend (Providers, Patients, Statuses)
 4. **Crear interfaces de usuario** para gestión de pacientes
-5. **Integrar frontend con backend**
-6. **Agregar variables de entorno**
-7. **Completar documentación**
+5. **Integrar frontend con backend** (axios, TanStack Query)
+6. ~~**Agregar variables de entorno**~~ ✅ **COMPLETADO**
+7. **Completar documentación específica** del proyecto
 
 ---
 
@@ -340,4 +374,50 @@ bun check-types          # Verificar tipos TypeScript
 - **Next.js**: SSR/SSG y routing integrado
 - **Configuraciones compartidas**: Consistencia de código
 - **TypeScript**: Type safety en todo el proyecto
-- **Linting configurado**: Calidad de código desde el inicio 
+- **Linting configurado**: Calidad de código desde el inicio
+- **🐳 Docker completo**: Desarrollo con hot reload y producción optimizada
+- **🔧 Scripts de conveniencia**: Comandos fáciles para gestionar el proyecto
+
+---
+
+## 🎉 **LOGROS COMPLETADOS - CONFIGURACIÓN DOCKER**
+
+### ✅ **Archivos Creados:**
+- `apps/backend/Dockerfile` - Multi-stage build con imagen oficial Bun
+- `apps/frontend/Dockerfile` - Multi-stage build con imagen oficial Bun
+- `docker-compose.yml` - Orquestación completa de 4 servicios
+- `docker-scripts.sh` - Script de conveniencia con 15+ comandos
+- `env.template` - Variables de entorno documentadas
+- `init-db/01-init.sql` - Inicialización de PostgreSQL
+- `.dockerignore` - Optimización de builds
+
+### ✅ **Servicios Funcionando:**
+- **PostgreSQL 16**: Base de datos con health checks
+- **Backend NestJS**: API con hot reload en puerto 3000
+- **Frontend Next.js**: App con hot reload en puerto 3001
+- **Adminer**: Gestión visual de BD en puerto 8080
+
+### ✅ **Características Implementadas:**
+- **Hot Reload**: Cambios instantáneos en desarrollo
+- **Multi-stage builds**: Optimización para desarrollo/producción
+- **Volúmenes**: Persistencia de datos y montaje de código
+- **Health checks**: Verificación automática de servicios
+- **Networking**: Comunicación interna entre servicios
+- **Variables de entorno**: Configuración flexible
+- **Scripts de conveniencia**: Comandos fáciles de usar
+
+### ✅ **Comandos Disponibles:**
+```bash
+# Gestión principal
+./docker-scripts.sh dev     # ⭐ Más importante
+./docker-scripts.sh status  # Ver estado
+./docker-scripts.sh logs    # Ver logs
+./docker-scripts.sh clean   # Limpiar todo
+
+# Desarrollo
+./docker-scripts.sh shell-backend  # Terminal backend
+./docker-scripts.sh logs-frontend  # Logs específicos
+./docker-scripts.sh db-reset       # Reiniciar BD
+```
+
+### 🎯 **Próximo Paso:** Configurar entidades TypeORM 
