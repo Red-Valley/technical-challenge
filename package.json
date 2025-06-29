@@ -14,9 +14,16 @@
     "docker:stop": "./docker-scripts.sh stop",
     "docker:logs": "./docker-scripts.sh logs",
     "docker:clean": "./docker-scripts.sh clean",
-    "docker:status": "./docker-scripts.sh status"
+    "docker:status": "./docker-scripts.sh status",
+    "prepare": "husky",
+    "lint:staged": "lint-staged",
+    "lint:all": "turbo lint",
+    "format:all": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "pre-commit": "lint-staged"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "prettier": "^3.6.0",
     "turbo": "^2.5.4",
     "typescript": "5.8.2"
@@ -28,5 +35,24 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "apps/backend/**/*.{ts,js}": [
+      "cd apps/backend && bun run lint:fix",
+      "prettier --write"
+    ],
+    "apps/frontend/**/*.{ts,tsx,js,jsx}": [
+      "cd apps/frontend && bun run lint:fix",
+      "prettier --write"
+    ],
+    "packages/**/*.{ts,js}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ]
+  }
 }

@@ -1,0 +1,48 @@
+# EditorConfig - Configuración de editores
+# https://editorconfig.org
+
+# Configuración global para todos los archivos
+root = true
+
+# Configuración para todos los archivos
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Configuración específica para archivos de código
+[*.{js,jsx,ts,tsx}]
+indent_size = 2
+max_line_length = 100
+
+# Configuración para archivos JSON
+[*.json]
+indent_size = 2
+
+# Configuración para archivos YAML
+[*.{yml,yaml}]
+indent_size = 2
+
+# Configuración para archivos Markdown
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Configuración para archivos Python (si los hay)
+[*.py]
+indent_size = 4
+
+# Configuración para archivos de configuración
+[*.{sh,bash}]
+indent_size = 2
+
+# Configuración para Docker
+[Dockerfile*]
+indent_size = 2
+
+# Configuración para archivos Make
+[Makefile]
+indent_style = tab 
