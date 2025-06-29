@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Base de datos PostgreSQL
   postgres:
@@ -19,7 +17,11 @@ services:
     networks:
       - technical-challenge-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-technical_challenge}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-technical_challenge}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,6 +43,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
       JWT_SECRET: ${JWT_SECRET:-your-secret-key}
       API_PORT: ${API_PORT:-3000}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/technical_challenge?schema=public}
     ports:
       - "${API_PORT:-3000}:3000"
     volumes:
@@ -53,7 +56,30 @@ services:
         condition: service_healthy
     networks:
       - technical-challenge-network
-    command: ["bun", "run", "dev"]
+    command: >
+      sh -c "
+        echo '🚀 Iniciando configuración automática del backend...' &&
+        echo '⏳ Esperando base de datos...' &&
+        until cd /app/apps/backend && bun run prisma db push --accept-data-loss 2>/dev/null; do
+          echo '⏳ Base de datos no disponible, esperando...' &&
+          sleep 2
+        done &&
+        echo '✅ Base de datos disponible!' &&
+        echo '🔧 Generando cliente de Prisma...' &&
+        cd /app/apps/backend && bun run prisma generate &&
+        echo '📦 Ejecutando migraciones...' &&
+        (cd /app/apps/backend && bun run prisma migrate deploy 2>/dev/null || (
+          echo '⚠️ Usando db push...' &&
+          cd /app/apps/backend && bun run prisma db push --accept-data-loss
+        )) &&
+        echo '✅ Migraciones completadas!' &&
+        echo '🌱 Ejecutando seed...' &&
+        cd /app/apps/backend && bun run prisma:seed &&
+        echo '✅ Seed completado!' &&
+        echo '🎉 Configuración completada!' &&
+        echo '🚀 Iniciando servidor...' &&
+        cd /app/apps/backend && bun run dev
+      "
 
   # Frontend Next.js
   frontend:
@@ -101,4 +127,4 @@ volumes:
 
 networks:
   technical-challenge-network:
-    driver: bridge 
+    driver: bridge

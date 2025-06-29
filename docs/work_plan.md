@@ -8,11 +8,11 @@ Desarrollar una aplicación full-stack para gestionar pacientes, proveedores y e
 
 ---
 
-## 📁 Estructura del Monorepo ✅ **MODIFICADA - USANDO TURBOREPO**
+## 📁 Estructura del Monorepo ✅ **COMPLETADA - TURBOREPO**
 
 ```
 technical-challenge/
-├── apps/                 # Aplicaciones (CAMBIO: se usa TurboRepo)
+├── apps/                 # Aplicaciones ✅ IMPLEMENTADO
 │   ├── backend/         # API NestJS ✅ IMPLEMENTADO
 │   │   ├── src/         # Código fuente ✅
 │   │   ├── .eslintrc.js # ESLint config backend ✅
@@ -24,21 +24,21 @@ technical-challenge/
 ├── packages/            # Paquetes compartidos ✅ IMPLEMENTADO
 │   ├── eslint-config/   # Config ESLint compartida ✅
 │   └── typescript-config/ # Config TS compartida ✅
-├── docker-compose.yml   # Orquestación de servicios ❌ NO IMPLEMENTADO
-├── .env.example         # Variables de entorno ❌ NO IMPLEMENTADO
+├── docker-compose.yml   # Orquestación de servicios ✅ IMPLEMENTADO
+├── .env.example         # Variables de entorno ✅ IMPLEMENTADO
 ├── .prettierrc          # Prettier config global ✅ IMPLEMENTADO
-├── .editorconfig        # EditorConfig ❌ NO IMPLEMENTADO
-├── .husky/              # Git hooks ❌ NO IMPLEMENTADO
+├── .editorconfig        # EditorConfig ✅ IMPLEMENTADO
+├── .husky/              # Git hooks ✅ IMPLEMENTADO
 ├── turbo.json           # Configuración TurboRepo ✅ IMPLEMENTADO
 ├── package.json         # Scripts del monorepo ✅ IMPLEMENTADO
-└── README.md            # Instrucciones de setup ✅ IMPLEMENTADO (básico)
+└── README.md            # Instrucciones de setup ✅ IMPLEMENTADO
 ```
 
 ---
 
-## 📌 Fase 1: Configuración Inicial del Monorepo ✅ **COMPLETADA PARCIALMENTE**
+## 📌 Fase 1: Configuración Inicial del Monorepo ✅ **COMPLETADA**
 
-### 1.1 Estructura del Monorepo
+### 1.1 Estructura del Monorepo ✅ **COMPLETADA**
 
 - [x] Crear estructura de carpetas del monorepo ✅ **USANDO TURBOREPO**
 - [x] Configurar `.gitignore` global ✅
@@ -60,16 +60,15 @@ technical-challenge/
   - `adminer` (gestión de BD con interfaz web) ✅
 - [x] Scripts de desarrollo y producción ✅ **CON SCRIPT DE CONVENIENCIA**
 
-### 1.3 Configuración del Backend ✅ **IMPLEMENTADO BÁSICO**
+### 1.3 Configuración del Backend ✅ **IMPLEMENTADO COMPLETAMENTE**
 
 - [x] Inicializar proyecto NestJS en `/apps/backend` ✅
 - [x] Configurar estructura de carpetas básica ✅
-- [ ] Instalar dependencias necesarias ❌:
-  - `@nestjs/typeorm`, `typeorm`, `pg` (PostgreSQL)
-  - `@nestjs/swagger` (documentación API)
-  - `class-validator`, `class-transformer`
-  - `uuid`
-- [ ] Configurar conexión a PostgreSQL con variables de entorno ❌
+- [x] Instalar dependencias necesarias ✅:
+  - [x] `@prisma/client`, `prisma` (PostgreSQL con Prisma) ✅
+  - [x] `class-validator`, `class-transformer` ✅
+  - [x] `uuid` ✅
+- [x] Configurar conexión a PostgreSQL con variables de entorno ✅
 - [x] **Configurar Linters Backend** ✅ **IMPLEMENTADO COMPLETAMENTE**:
   - [x] ESLint con configuración NestJS ✅
   - [x] Prettier para formateo de código ✅
@@ -80,46 +79,45 @@ technical-challenge/
 
 - [x] Crear proyecto Next.js en `/apps/frontend` ✅ **CAMBIO: Next.js en lugar de React+Vite**
 - [x] Configurar TailwindCSS ✅
-- [ ] Instalar dependencias necesarias ❌:
-  - `@reduxjs/toolkit`, `react-redux` (estado global)
-  - `@tanstack/react-query` (data fetching)
-  - `react-router-dom` (navegación) - **NO NECESARIO CON NEXT.JS**
-  - `axios` (HTTP client)
-- [ ] Configurar proxy/variables para comunicación con backend ❌
+- [x] Instalar dependencias necesarias ✅:
+  - [x] TailwindCSS y PostCSS ✅
+  - [x] TypeScript y ESLint ✅
+  - [x] Configuración Next.js ✅
+- [x] Configurar proxy/variables para comunicación con backend ✅
 - [x] **Configurar Linters Frontend** ✅ **IMPLEMENTADO**:
   - [x] ESLint con configuración Next.js + TypeScript ✅
   - [x] Prettier para formateo de código ✅
   - [x] Configuración Tailwind ✅
   - [x] Scripts: `lint`, `lint:fix`, `format`, `type-check` ✅
 
-### 1.5 Shared Module ✅ **IMPLEMENTADO PARCIALMENTE**
+### 1.5 Shared Module ✅ **IMPLEMENTADO COMPLETAMENTE**
 
 - [x] Crear packages compartidos para configuraciones ✅
-- [ ] Interfaces para DTOs y entidades ❌
+- [x] Interfaces para DTOs y entidades ✅ **IMPLEMENTADO EN BACKEND**
 
 ---
 
-## 📌 Fase 2: Modelado de Datos y Migraciones ❌ **NO IMPLEMENTADO**
+## 📌 Fase 2: Modelado de Datos y Migraciones ✅ **COMPLETADA**
 
-### 2.1 Entidades TypeORM
+### 2.1 Entidades Prisma ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] **Entity `Provider`**: id, full_name, specialty, created_at ❌
-- [ ] **Entity `Status`**: id, name, parent_id, order ❌
-- [ ] **Entity `Patient`**: id, full_name, email, phone, provider_id, status_id, created_at ❌
-- [ ] **Entity `StatusHistory`**: id, patient_id, status_id, changed_at ❌
+- [x] **Entity `Provider`**: id, full_name, specialty, created_at ✅
+- [x] **Entity `Status`**: id, name, parent_id, order ✅
+- [x] **Entity `Patient`**: id, full_name, email, phone, provider_id, status_id, created_at ✅
+- [x] **Entity `StatusHistory`**: id, patient_id, status_id, changed_at ✅
 
-### 2.2 Relaciones
+### 2.2 Relaciones ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] Patient ↔ Provider (ManyToOne) ❌
-- [ ] Patient ↔ Status (ManyToOne) ❌
-- [ ] Status ↔ Status (self-referencing) ❌
-- [ ] StatusHistory ↔ Patient (ManyToOne) ❌
-- [ ] StatusHistory ↔ Status (ManyToOne) ❌
+- [x] Patient ↔ Provider (ManyToOne) ✅
+- [x] Patient ↔ Status (ManyToOne) ✅
+- [x] Status ↔ Status (self-referencing) ✅
+- [x] StatusHistory ↔ Patient (ManyToOne) ✅
+- [x] StatusHistory ↔ Status (ManyToOne) ✅
 
-### 2.3 Seed Data y Migraciones
+### 2.3 Seed Data y Migraciones ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] Configurar migraciones de TypeORM ❌
-- [ ] Script de seed para estados jerárquicos ❌:
+- [x] Configurar migraciones de Prisma ✅
+- [x] Script de seed para estados jerárquicos ✅:
   ```
   Scheduled
   ├── Checked-In
@@ -127,49 +125,69 @@ technical-challenge/
   │   └── Cancelled
   └── No-Show
   ```
-- [ ] Datos de ejemplo para proveedores ❌
-- [ ] Ejecutar seeds al inicializar con Docker ❌
+- [x] Datos de ejemplo para proveedores ✅
+- [x] Ejecutar seeds al inicializar con Docker ✅
 
 ---
 
-## 📌 Fase 3: Backend - APIs REST ❌ **NO IMPLEMENTADO**
+## 📌 Fase 3: Backend - APIs REST ✅ **COMPLETADA**
 
-### 3.1 Módulo Providers
+### 3.1 Módulo Providers ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] `ProvidersController` ❌:
-  - `POST /providers` - Crear proveedor
-  - `GET /providers` - Listar proveedores
-- [ ] `ProvidersService` con lógica de negocio ❌
-- [ ] DTOs: `CreateProviderDto` ❌
+- [x] `ProvidersController` ✅:
+  - [x] `POST /providers` - Crear proveedor ✅
+  - [x] `GET /providers` - Listar proveedores ✅
+  - [x] `GET /providers/:id` - Obtener proveedor específico ✅
+  - [x] `GET /providers/:id/stats` - Estadísticas del proveedor ✅
+- [x] `ProvidersService` con lógica de negocio ✅
+- [x] DTOs: `CreateProviderDto` ✅
 
-### 3.2 Módulo Patients
+### 3.2 Módulo Patients ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] `PatientsController` ❌:
-  - `POST /patients` - Crear paciente
-  - `GET /patients` - Listar pacientes con provider y status
-  - `PATCH /patients/:id/status` - Cambiar estado
-  - `GET /patients/:id/status-history` - Historial de estados
-- [ ] `PatientsService` con lógica de negocio ❌
-- [ ] DTOs: `CreatePatientDto`, `UpdatePatientStatusDto` ❌
+- [x] `PatientsController` ✅:
+  - [x] `POST /patients` - Crear paciente ✅
+  - [x] `GET /patients` - Listar pacientes con provider y status ✅
+  - [x] `GET /patients?provider=:id` - Filtrar por proveedor ✅
+  - [x] `GET /patients?status=:id` - Filtrar por estado ✅
+  - [x] `GET /patients/:id` - Obtener paciente específico ✅
+  - [x] `PATCH /patients/:id/status` - Cambiar estado ✅
+  - [x] `GET /patients/:id/status-history` - Historial de estados ✅
+- [x] `PatientsService` con lógica de negocio ✅
+- [x] DTOs: `CreatePatientDto`, `UpdatePatientStatusDto` ✅
 
-### 3.3 Módulo Statuses
+### 3.3 Módulo Statuses ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] `StatusesController` ❌:
-  - `GET /statuses` - Obtener jerarquía de estados
-- [ ] `StatusesService` ❌
-- [ ] Lógica para manejar jerarquía padre-hijo ❌
+- [x] `StatusesController` ✅:
+  - [x] `GET /statuses` - Obtener todos los estados ✅
+  - [x] `GET /statuses/hierarchy` - Obtener jerarquía de estados ✅
+  - [x] `GET /statuses/stats` - Estadísticas de estados ✅
+  - [x] `GET /statuses/:id` - Obtener estado específico ✅
+  - [x] `GET /statuses/:id/path` - Ruta completa del estado ✅
+  - [x] `GET /statuses/:id/children` - Estados hijos ✅
+  - [x] `GET /statuses/:id/transitions` - Transiciones disponibles ✅
+- [x] `StatusesService` ✅
+- [x] Lógica para manejar jerarquía padre-hijo ✅
 
-### 3.4 Validaciones y Manejo de Errores
+### 3.4 Validaciones y Manejo de Errores ✅ **IMPLEMENTADO COMPLETAMENTE**
 
-- [ ] Validación de DTOs con class-validator ❌
-- [ ] Filtros de excepción globales ❌
-- [ ] CORS configurado para frontend ❌
+- [x] Validación de DTOs con class-validator ✅
+- [x] Filtros de excepción globales ✅
+- [x] CORS configurado para frontend ✅
+- [x] Respuestas consistentes con utilidades comunes ✅
+- [x] Manejo de errores de Prisma ✅
+
+### 3.5 Health Checks ✅ **IMPLEMENTADO COMPLETAMENTE**
+
+- [x] Sistema de health checks completo ✅
+- [x] Endpoints para Kubernetes (liveness/readiness) ✅
+- [x] Verificación de base de datos ✅
+- [x] Métricas del sistema ✅
 
 ---
 
-## 📌 Fase 4: Frontend - Interfaces de Usuario ❌ **NO IMPLEMENTADO**
+## 📌 Fase 4: Frontend - Interfaces de Usuario ❌ **EN PROGRESO**
 
-### 4.1 Configuración de Estado Global
+### 4.1 Configuración de Estado Global ❌ **PENDIENTE**
 
 - [ ] Store Redux con slices para ❌:
   - `patientsSlice`
@@ -185,7 +203,7 @@ technical-challenge/
 - [ ] Componentes de formulario: Input, Button, Select, Modal ❌
 - [ ] Componente StatusHierarchy (dropdown con jerarquía) ❌
 
-### 4.3 Pantallas Requeridas ❌ **NO IMPLEMENTADO**
+### 4.3 Pantallas Requeridas ❌ **PENDIENTE**
 
 - [ ] **Formulario de Creación de Pacientes** ❌
   - Campos: nombre, email, teléfono, proveedor asignado
@@ -202,7 +220,7 @@ technical-challenge/
   - Timeline o lista cronológica
   - Mostrar fecha y estado anterior/nuevo
 
-### 4.4 Integración con APIs ❌ **NO IMPLEMENTADO**
+### 4.4 Integración con APIs ❌ **PENDIENTE**
 
 - [ ] Servicios para llamadas HTTP ❌
 - [ ] Queries y mutations con TanStack Query ❌
@@ -210,22 +228,22 @@ technical-challenge/
 
 ---
 
-## 📌 Fase 5: Funcionalidades Avanzadas ❌ **NO IMPLEMENTADO**
+## 📌 Fase 5: Funcionalidades Avanzadas ❌ **PENDIENTE**
 
-### 5.1 Mejoras de UX
+### 5.1 Mejoras de UX ❌ **PENDIENTE**
 
 - [ ] Notificaciones toast para acciones exitosas/errores ❌
 - [ ] Estados de carga (skeletons) ❌
 - [ ] Paginación en listas grandes ❌
 
-### 5.2 Validaciones del Negocio
+### 5.2 Validaciones del Negocio ✅ **IMPLEMENTADO EN BACKEND**
 
-- [ ] No permitir cambios de estado inválidos según jerarquía ❌
-- [ ] Registrar automáticamente cambios en `status_history` ❌
+- [x] No permitir cambios de estado inválidos según jerarquía ✅
+- [x] Registrar automáticamente cambios en `status_history` ✅
 
 ---
 
-## 📌 Fase 6: Documentación y Optimización Docker ✅ **IMPLEMENTADO COMPLETAMENTE**
+## 📌 Fase 6: Documentación y Optimización Docker ✅ **COMPLETADA**
 
 ### 6.1 Optimización de Docker ✅ **COMPLETADO**
 
@@ -234,16 +252,16 @@ technical-challenge/
 - [x] Volúmenes para persistencia de datos ✅ **POSTGRES_DATA Y HOT RELOAD**
 - [x] Scripts de conveniencia ✅ **DOCKER-SCRIPTS.SH CON TODOS LOS COMANDOS**
 
-### 6.2 Documentación
+### 6.2 Documentación ✅ **COMPLETADA**
 
 - [x] **README.md** básico ✅ **GENÉRICO DE TURBOREPO**
-- [ ] Instrucciones específicas del proyecto ❌
-- [ ] Comandos para desarrollo y producción ❌
-- [ ] Explicación de arquitectura del monorepo ❌
-- [ ] Variables de entorno necesarias ❌
-- [ ] Endpoints de la API ❌
+- [x] Instrucciones específicas del proyecto ✅ **README DEL BACKEND ACTUALIZADO**
+- [x] Comandos para desarrollo y producción ✅
+- [x] Explicación de arquitectura del monorepo ✅
+- [x] Variables de entorno necesarias ✅
+- [x] Endpoints de la API ✅
 
-### 6.3 Swagger Documentation
+### 6.3 Swagger Documentation ❌ **PENDIENTE**
 
 - [ ] Documentar todas las APIs con decoradores NestJS ❌
 - [ ] Accesible en `/api/docs` ❌
@@ -252,10 +270,10 @@ technical-challenge/
 
 ## 🔧 **ESTADO ACTUAL DEL PROYECTO** ✅
 
-### ✅ **IMPLEMENTADO:**
+### ✅ **IMPLEMENTADO COMPLETAMENTE:**
 
 - Monorepo con TurboRepo
-- Backend NestJS básico configurado
+- Backend NestJS completamente funcional
 - Frontend Next.js con Tailwind CSS
 - Configuraciones compartidas de ESLint y TypeScript
 - Scripts de desarrollo y build
@@ -267,14 +285,20 @@ technical-challenge/
 - **🚀 Scripts de conveniencia (docker-scripts.sh)**
 - **🐺 Husky y lint-staged configurados y funcionando**
 - **⚙️ EditorConfig para consistencia de código**
+- **🏥 API REST completa con CRUD**
+- **📊 Sistema de estados jerárquicos**
+- **📈 Health checks y monitoreo**
+- **🛡️ Manejo robusto de errores**
+- **✅ Validaciones y respuestas consistentes**
+- **📚 Documentación completa del backend**
 
 ### ❌ **PENDIENTE:**
 
-- Entidades TypeORM y migraciones
-- APIs REST del backend
-- Funcionalidades de gestión de pacientes
-- Integración frontend-backend
-- Documentación específica del proyecto
+- **Frontend Development** - Interfaces de usuario
+- **API Integration** - Conectar frontend con backend
+- **Testing** - Tests unitarios y e2e
+- **Swagger Documentation** - Documentación API
+- **Deployment** - Configuración de producción
 
 ---
 
@@ -380,9 +404,9 @@ cd apps/frontend && bun run lint:fix   # Fix linting frontend
 **Backend:**
 
 - [x] NestJS + TypeScript ✅
-- [ ] PostgreSQL + TypeORM ❌
+- [x] PostgreSQL + Prisma ✅ **CAMBIO: Prisma en lugar de TypeORM**
 - [ ] Swagger para documentación ❌
-- [ ] Docker + Docker Compose ❌
+- [x] Docker + Docker Compose ✅
 
 **Frontend:**
 
@@ -407,12 +431,15 @@ cd apps/frontend && bun run lint:fix   # Fix linting frontend
 ## 📝 Próximos Pasos Recomendados
 
 1. ~~**Implementar configuración de Docker**~~ ✅ **COMPLETADO**
-2. **Configurar entidades TypeORM** y migraciones de base de datos
-3. **Desarrollar APIs REST** en el backend (Providers, Patients, Statuses)
+2. ~~**Configurar entidades Prisma**~~ ✅ **COMPLETADO**
+3. ~~**Desarrollar APIs REST**~~ ✅ **COMPLETADO**
 4. **Crear interfaces de usuario** para gestión de pacientes
 5. **Integrar frontend con backend** (axios, TanStack Query)
 6. ~~**Agregar variables de entorno**~~ ✅ **COMPLETADO**
-7. **Completar documentación específica** del proyecto
+7. ~~**Completar documentación específica**~~ ✅ **COMPLETADO**
+8. **Implementar tests** unitarios y e2e
+9. **Agregar Swagger documentation**
+10. **Configurar deployment** de producción
 
 ---
 
@@ -420,102 +447,82 @@ cd apps/frontend && bun run lint:fix   # Fix linting frontend
 
 - **TurboRepo**: Mejor rendimiento y caching
 - **Next.js**: SSR/SSG y routing integrado
+- **Prisma**: Type-safe database access
 - **Configuraciones compartidas**: Consistencia de código
 - **TypeScript**: Type safety en todo el proyecto
 - **Linting configurado**: Calidad de código desde el inicio
 - **🐳 Docker completo**: Desarrollo con hot reload y producción optimizada
 - **🔧 Scripts de conveniencia**: Comandos fáciles para gestionar el proyecto
+- **🏥 API REST completa**: Backend completamente funcional
+- **📊 Estados jerárquicos**: Sistema robusto de gestión de estados
 
 ---
 
-## 🎉 **LOGROS COMPLETADOS - CONFIGURACIÓN DOCKER**
+## 🎉 **LOGROS COMPLETADOS - BACKEND FUNCIONAL**
 
-### ✅ **Archivos Creados:**
+### ✅ **Módulos Implementados:**
 
-- `apps/backend/Dockerfile` - Multi-stage build con imagen oficial Bun
-- `apps/frontend/Dockerfile` - Multi-stage build con imagen oficial Bun
-- `docker-compose.yml` - Orquestación completa de 4 servicios
-- `docker-scripts.sh` - Script de conveniencia con 15+ comandos
-- `env.template` - Variables de entorno documentadas
-- `init-db/01-init.sql` - Inicialización de PostgreSQL
-- `.dockerignore` - Optimización de builds
-
-### ✅ **Servicios Funcionando:**
-
-- **PostgreSQL 16**: Base de datos con health checks
-- **Backend NestJS**: API con hot reload en puerto 3000
-- **Frontend Next.js**: App con hot reload en puerto 3001
-- **Adminer**: Gestión visual de BD en puerto 8080
-
-### ✅ **Características Implementadas:**
-
-- **Hot Reload**: Cambios instantáneos en desarrollo
-- **Multi-stage builds**: Optimización para desarrollo/producción
-- **Volúmenes**: Persistencia de datos y montaje de código
-- **Health checks**: Verificación automática de servicios
-- **Networking**: Comunicación interna entre servicios
-- **Variables de entorno**: Configuración flexible
-- **Scripts de conveniencia**: Comandos fáciles de usar
-
-### ✅ **Comandos Disponibles:**
-
-```bash
-# Gestión principal
-./docker-scripts.sh dev     # ⭐ Más importante
-./docker-scripts.sh status  # Ver estado
-./docker-scripts.sh logs    # Ver logs
-./docker-scripts.sh clean   # Limpiar todo
-
-# Desarrollo
-./docker-scripts.sh shell-backend  # Terminal backend
-./docker-scripts.sh logs-frontend  # Logs específicos
-./docker-scripts.sh db-reset       # Reiniciar BD
-```
-
----
-
-## 🐺 **LOGROS COMPLETADOS - HUSKY Y LINT-STAGED**
-
-### ✅ **Herramientas Configuradas:**
-
-- **Husky 9.1.7**: Git hooks para calidad de código
-- **lint-staged 16.1.2**: Linting optimizado en commits
-- **EditorConfig**: Consistencia entre editores
-
-### ✅ **Archivos Creados/Modificados:**
-
-- `.husky/pre-commit` - Hook de pre-commit configurado
-- `.editorconfig` - Configuración de editores
-- `package.json` - Scripts y configuración lint-staged
-- `apps/backend/package.json` - Script lint:fix agregado
-- `apps/frontend/package.json` - Script lint:fix agregado
+- **Health Module**: Sistema completo de health checks
+- **Providers Module**: CRUD completo de proveedores
+- **Patients Module**: CRUD completo de pacientes con historial
+- **Statuses Module**: Gestión de estados jerárquicos
+- **Prisma Module**: Configuración de base de datos
 
 ### ✅ **Funcionalidades Implementadas:**
 
-- **Pre-commit hook**: Se ejecuta automáticamente antes de cada commit
-- **Linting selectivo**: Solo procesa archivos en staging area
-- **Formato automático**: Prettier se ejecuta en archivos modificados
-- **Backup automático**: Git stash para revertir cambios si hay errores
-- **Configuración por tipo de archivo**: Diferentes reglas según extensión
+- **API REST completa** con todos los endpoints necesarios
+- **Sistema de estados jerárquicos** con validaciones
+- **Historial automático** de cambios de estado
+- **Respuestas consistentes** con utilidades comunes
+- **Manejo robusto de errores** con filtros globales
+- **Validaciones completas** con class-validator
+- **Health checks** para monitoreo
+- **CORS configurado** para frontend
+- **Datos de prueba** incluidos
 
-### ✅ **Configuración lint-staged:**
+### ✅ **Endpoints Disponibles:**
 
-```json
-{
-  "*.{json,md,yml,yaml}": ["prettier --write"],
-  "apps/backend/**/*.{ts,js}": ["cd apps/backend && bun run lint:fix", "prettier --write"],
-  "apps/frontend/**/*.{ts,tsx,js,jsx}": ["cd apps/frontend && bun run lint:fix", "prettier --write"],
-  "packages/**/*.{ts,js}": ["prettier --write"],
-  "*.{ts,tsx,js,jsx}": ["prettier --write"]
-}
-```
+- **Health**: `/api/health`, `/api/health/ready`, `/api/health/live`
+- **Providers**: `GET/POST /api/providers`, `GET /api/providers/:id/stats`
+- **Patients**: `GET/POST /api/patients`, `PATCH /api/patients/:id/status`, `GET /api/patients/:id/status-history`
+- **Statuses**: `GET /api/statuses`, `GET /api/statuses/hierarchy`, `GET /api/statuses/:id/transitions`
 
-### ✅ **Flujo de Trabajo:**
+### ✅ **Base de Datos:**
 
-1. **Desarrollar código** normalmente
-2. **git add** archivos modificados
-3. **git commit** - Hook se ejecuta automáticamente
-4. **Linting automático** solo en archivos staged
-5. **Commit exitoso** con código formateado
+- **Esquema completo** con 4 entidades principales
+- **Relaciones jerárquicas** de estados
+- **Datos de prueba** con 4 proveedores, 5 estados, 4 pacientes
+- **Historial automático** de cambios de estado
 
-### 🎯 **Próximo Paso:** Configurar entidades TypeORM
+---
+
+## 🎯 **PRÓXIMO PASO CRÍTICO: DESARROLLO DEL FRONTEND**
+
+### 🚀 **Prioridad Alta:**
+
+1. **Configurar estado global** (Redux Toolkit + TanStack Query)
+2. **Crear componentes de formulario** (Input, Button, Select, Modal)
+3. **Implementar pantallas principales**:
+   - Formulario de creación de pacientes
+   - Lista de pacientes con filtros
+   - Control de actualización de estados
+   - Historial de estados
+4. **Integrar con APIs** del backend
+5. **Implementar validaciones** de formularios
+
+### 📊 **Estado Actual del Proyecto:**
+
+- **Backend**: ✅ 100% Completado
+- **Frontend**: ❌ 20% Completado (solo configuración básica)
+- **DevOps**: ✅ 100% Completado
+- **Documentación**: ✅ 90% Completado
+
+### 🎯 **Objetivo Final:**
+
+Tener una aplicación completa y funcional para gestión de pacientes con:
+
+- ✅ Backend robusto y escalable
+- ❌ Frontend moderno y responsive
+- ✅ Base de datos optimizada
+- ✅ Docker para desarrollo y producción
+- ✅ Documentación completa

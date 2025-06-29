@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id         String   @id @default(uuid()) @db.Uuid
+  full_name  String   @map("full_name")
+  specialty  String
+  created_at DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  patients Patient[]
+
+  @@map("providers")
+}
+
+model Status {
+  id        String  @id @default(uuid()) @db.Uuid
+  name      String  @unique
+  parent_id String? @map("parent_id") @db.Uuid
+  order     Int
+
+  // Auto-relación para jerarquía padre-hijo
+  parent   Status?  @relation("StatusHierarchy", fields: [parent_id], references: [id])
+  children Status[] @relation("StatusHierarchy")
+
+  // Relaciones
+  patients       Patient[]
+  status_history StatusHistory[]
+
+  @@map("statuses")
+}
+
+model Patient {
+  id          String   @id @default(uuid()) @db.Uuid
+  full_name   String   @map("full_name")
+  email       String   @unique
+  phone       String
+  provider_id String   @map("provider_id") @db.Uuid
+  status_id   String   @map("status_id") @db.Uuid
+  created_at  DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  provider Provider @relation(fields: [provider_id], references: [id])
+  status   Status   @relation(fields: [status_id], references: [id])
+
+  status_history StatusHistory[]
+
+  @@map("patients")
+}
+
+model StatusHistory {
+  id         String   @id @default(uuid()) @db.Uuid
+  patient_id String   @map("patient_id") @db.Uuid
+  status_id  String   @map("status_id") @db.Uuid
+  changed_at DateTime @default(now()) @map("changed_at")
+
+  // Relaciones
+  patient Patient @relation(fields: [patient_id], references: [id])
+  status  Status  @relation(fields: [status_id], references: [id])
+
+  @@map("status_history")
+}
