@@ -1,138 +1,135 @@
-## Technical Challenge
+# Turborepo starter
 
-### Background
+This Turborepo starter is maintained by the Turborepo core team.
 
-At VIP Medical Group, we are building a new internal module for our Medwork platform—a system that allows our staff to register patients, assign them to doctors (providers), and track their clinical status throughout their care journey.
+## Using this example
 
-In this challenge, you’ll simulate part of this module by creating a full-stack application that allows managing patients, providers, and clinical statuses with a parent-child hierarchy.
+Run the following command:
 
-We are **not evaluating specific tools or patterns**. We simply want to understand how you think, how you code, and how you approach real-world problems. Be yourself.
+```sh
+npx create-turbo@latest
+```
 
+## What's inside?
 
+This Turborepo includes the following packages/apps:
 
-### What You Need to Build
+### Apps and Packages
 
-A functional **full stack application** with the ability to:
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-1. Create patients and providers
-2. Assign a provider to a patient
-3. Change the patient’s clinical status (with hierarchy)
-4. Display the status change history of a patient
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
+### Utilities
 
+This Turborepo has some additional tools already setup for you:
 
-### Database Schema
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-You must implement these 4 tables exactly as described below:
+### Build
 
-#### 1. `patients`
+To build all apps and packages, run the following command:
 
-| Field        | Type      |
-| ------------ | --------- |
-| id           | UUID      |
-| full\_name   | string    |
-| email        | string    |
-| phone        | string    |
-| provider\_id | UUID (FK) |
-| status\_id   | UUID (FK) |
-| created\_at  | datetime  |
+```
+cd my-turborepo
 
-#### 2. `providers`
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo build
 
-| Field       | Type     |
-| ----------- | -------- |
-| id          | UUID     |
-| full\_name  | string   |
-| specialty   | string   |
-| created\_at | datetime |
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo build
+yarn dlx turbo build
+pnpm exec turbo build
+```
 
-#### 3. `statuses`
+You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
 
-| Field      | Type                            |
-| ---------- | ------------------------------- |
-| id         | UUID                            |
-| name       | string                          |
-| parent\_id | UUID (nullable, FK to statuses) |
-| order      | integer                         |
+```
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo build --filter=docs
 
-> This table allows parent-child status relationships.
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo build --filter=docs
+yarn exec turbo build --filter=docs
+pnpm exec turbo build --filter=docs
+```
 
-#### 4. `status_history`
+### Develop
 
-| Field       | Type      |
-| ----------- | --------- |
-| id          | UUID      |
-| patient\_id | UUID (FK) |
-| status\_id  | UUID (FK) |
-| changed\_at | datetime  |
+To develop all apps and packages, run the following command:
 
+```
+cd my-turborepo
 
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo dev
 
-### Preloaded Statuses
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo dev
+yarn exec turbo dev
+pnpm exec turbo dev
+```
 
-These statuses must be preloaded in the database:
+You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
 
-* `Scheduled`
+```
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo dev --filter=web
 
-  * `Checked-In`
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo dev --filter=web
+yarn exec turbo dev --filter=web
+pnpm exec turbo dev --filter=web
+```
 
-    * `In Consultation`
-    * `Cancelled`
-  * `No-Show`
+### Remote Caching
 
-You can use a seed script or migrations to insert them.
+> [!TIP]
+> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
 
+Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
 
-### Tech Stack
+```
+cd my-turborepo
 
-#### Backend
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo login
 
-* Language: TypeScript
-* Framework: **NestJS** or **Express**
-* Database: **PostgreSQL**, **MySQL**, or **MongoDB**
-* If you prefer, you may separate logic into small services (e.g., `patients-service`, `statuses-service`)
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo login
+yarn exec turbo login
+pnpm exec turbo login
+```
 
-  * Use **HTTP**, **events**, or **gRPC** for inter-service communication
-  * If using multiple services, you must include an **API Gateway**
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-#### Frontend
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-* Framework: **React** (Vite or Next.js)
-* Styling: **TailwindCSS**
-* State management: **Redux Toolkit** or **Zustand**
-* Data fetching: **Tanstack Query**
+```
+# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
+turbo link
 
+# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
+npx turbo link
+yarn exec turbo link
+pnpm exec turbo link
+```
 
+## Useful Links
 
-### Required Screens
+Learn more about the power of Turborepo:
 
-You should include the following screens:
-
-1. Patient creation form
-2. Provider creation form
-3. Patient list (showing status and assigned provider)
-4. Patient status update control (e.g., dropdown)
-5. Patient status history (as timeline or list)
-
-> **Optional screen:** Provider list view.
-
-
-
-### Submission Instructions
-
-* You will receive a Git repository link for the base project.
-* **Fork the repository**, complete your work in a new branch, and **submit a pull request** to share your solution.
-* Include a `README.md` with:
-
-  * Clear instructions to run the project locally
-  * A short explanation of your architecture or design decisions
-  * A seed script to preload providers and statuses
-
-
-
-### Time Expectation
-
-You should spend no more than **8 hours** on this task.
-
-Don’t worry if you can’t finish everything. What matters most is **how far you get** and **how you approach the problem**.
+- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
+- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
+- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
+- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
+- [Configuration Options](https://turborepo.com/docs/reference/configuration)
+- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
