@@ -1,3 +1,5 @@
+import { ProvidersList } from 'src/components/providers';
+
 export default function Providers() {
-	return <div>Providers</div>;
+	return <ProvidersList />;
 }

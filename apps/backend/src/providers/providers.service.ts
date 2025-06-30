@@ -23,17 +23,9 @@ export class ProvidersService {
 	async findAll(): Promise<Provider[]> {
 		return await this.prisma.provider.findMany({
 			include: {
-				patients: {
+				_count: {
 					select: {
-						id: true,
-						full_name: true,
-						email: true,
-						status: {
-							select: {
-								id: true,
-								name: true
-							}
-						}
+						patients: true
 					}
 				}
 			},
