@@ -1,115 +1,120 @@
-# 🏥 Backend - Sistema de Gestión de Pacientes
+# 🏥 Backend - Patient Management System
 
-Sistema backend desarrollado con **NestJS**, **Prisma** y **PostgreSQL** para la gestión de pacientes con estados jerárquicos y seguimiento de historial.
+A robust backend system developed with **NestJS**, **Prisma**, and **PostgreSQL** for comprehensive patient management with hierarchical status tracking and historical monitoring.
 
-> **Parte del monorepo técnico** - Este backend está integrado en una arquitectura de monorepo usando TurboRepo con frontend Next.js.
+> **Part of the Technical Monorepo** - This backend is integrated into a TurboRepo monorepo architecture with a Next.js frontend.
 
-## 📋 Tabla de Contenidos
+## 📋 Table of Contents
 
-- [🏗️ Arquitectura](#️-arquitectura)
-- [🗄️ Esquema de Base de Datos](#️-esquema-de-base-de-datos)
-- [🚀 Configuración y Ejecución](#-configuración-y-ejecución)
-- [🐳 Desarrollo con Docker](#-desarrollo-con-docker)
-- [📚 API Endpoints](#-api-endpoints)
-- [🧪 Health Check](#-health-check)
-- [🔧 Utilidades Comunes](#-utilidades-comunes)
-- [🛡️ Manejo de Errores](#️-manejo-de-errores)
-- [🔍 Validaciones](#-validaciones)
-- [🌐 Configuración de CORS](#-configuración-de-cors)
-- [🧪 Datos de Prueba](#-datos-de-prueba)
-- [🔗 Integración con Monorepo](#-integración-con-monorepo)
+- [🏗️ Architecture Overview](#️-architecture-overview)
+- [🗄️ Database Schema](#️-database-schema)
+- [🚀 Setup and Execution](#-setup-and-execution)
+- [🐳 Docker Development](#-docker-development)
+- [📚 API Documentation](#-api-documentation)
+- [🧪 Health Check System](#-health-check-system)
+- [🔧 Common Utilities](#-common-utilities)
+- [🛡️ Error Handling](#️-error-handling)
+- [🔍 Validation System](#-validation-system)
+- [🌐 CORS Configuration](#-cors-configuration)
+- [🧪 Test Data](#-test-data)
+- [🔗 Monorepo Integration](#-monorepo-integration)
+- [📊 Project Status](#-project-status)
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture Overview
+
+### Project Structure
 
 ```
 src/
-├── common/               # Utilidades compartidas
-│   ├── interfaces/       # Interfaces de respuesta
-│   ├── utils/           # Funciones de utilidad
-│   ├── filters/         # Filtros globales
-│   └── index.ts         # Exportaciones
-├── health/              # Health Check
+├── common/               # Shared utilities and interfaces
+│   ├── interfaces/       # Response interfaces and types
+│   ├── utils/           # Utility functions
+│   ├── filters/         # Global exception filters
+│   └── index.ts         # Common exports
+├── health/              # Health check system
 │   ├── health.controller.ts
 │   ├── health.service.ts
 │   └── health.module.ts
-├── prisma/              # Configuración de Prisma
+├── prisma/              # Prisma configuration
 │   ├── prisma.service.ts
 │   └── prisma.module.ts
-├── providers/           # Módulo de Proveedores
+├── providers/           # Provider management module
 │   ├── dto/
 │   ├── providers.controller.ts
 │   ├── providers.service.ts
 │   └── providers.module.ts
-├── patients/            # Módulo de Pacientes
+├── patients/            # Patient management module
 │   ├── dto/
 │   ├── patients.controller.ts
 │   ├── patients.service.ts
 │   └── patients.module.ts
-├── statuses/            # Módulo de Estados
+├── statuses/            # Status management module
 │   ├── statuses.controller.ts
 │   ├── statuses.service.ts
 │   └── statuses.module.ts
-├── app.module.ts        # Módulo principal
-└── main.ts             # Punto de entrada
+├── app.module.ts        # Main application module
+└── main.ts             # Application entry point
 ```
 
-### Características Principales
+### Core Features
 
-- ✅ **Arquitectura modular** con NestJS
-- ✅ **Base de datos** PostgreSQL con Prisma ORM
-- ✅ **Respuestas consistentes** con utilidades comunes
-- ✅ **Manejo global de errores** con filtros personalizados
-- ✅ **Health checks** para monitoreo
-- ✅ **Validación automática** de DTOs
-- ✅ **Historial de estados** automático
-- ✅ **CORS configurado** para el frontend
-- ✅ **Integración con monorepo** TurboRepo
-- ✅ **Docker optimizado** con multi-stage builds
+- ✅ **Modular Architecture** with NestJS framework
+- ✅ **PostgreSQL Database** with Prisma ORM
+- ✅ **Consistent API Responses** with standardized utilities
+- ✅ **Global Error Handling** with custom exception filters
+- ✅ **Comprehensive Health Checks** for monitoring
+- ✅ **Automatic Validation** with DTOs
+- ✅ **Status History Tracking** with automatic logging
+- ✅ **CORS Configuration** for frontend integration
+- ✅ **Monorepo Integration** with TurboRepo
+- ✅ **Docker Optimization** with multi-stage builds
+- ✅ **TypeScript** with strict type checking
+- ✅ **RESTful API** with complete CRUD operations
 
-## 🗄️ Esquema de Base de Datos
+## 🗄️ Database Schema
 
-### Entidades Principales
+### Core Entities
 
-#### 1. **Providers** (Proveedores)
+#### 1. **Providers** (Healthcare Providers)
 
 ```sql
-- id: UUID (PK)
-- full_name: string
-- specialty: string
-- created_at: datetime
+- id: UUID (Primary Key)
+- full_name: string (Provider's full name)
+- specialty: string (Medical specialty)
+- created_at: datetime (Creation timestamp)
 ```
 
-#### 2. **Statuses** (Estados) - Con Jerarquía
+#### 2. **Statuses** (Patient Statuses) - Hierarchical Structure
 
 ```sql
-- id: UUID (PK)
-- name: string
-- parent_id: UUID (FK to statuses, nullable)
-- order: integer
+- id: UUID (Primary Key)
+- name: string (Status name, unique)
+- parent_id: UUID (Foreign Key to statuses, nullable for root statuses)
+- order: integer (Display order)
 ```
 
-#### 3. **Patients** (Pacientes)
+#### 3. **Patients** (Patient Records)
 
 ```sql
-- id: UUID (PK)
-- full_name: string
-- email: string (unique)
-- phone: string
-- provider_id: UUID (FK to providers)
-- status_id: UUID (FK to statuses)
-- created_at: datetime
+- id: UUID (Primary Key)
+- full_name: string (Patient's full name)
+- email: string (Unique email address)
+- phone: string (Contact phone number)
+- provider_id: UUID (Foreign Key to providers)
+- status_id: UUID (Foreign Key to statuses)
+- created_at: datetime (Creation timestamp)
 ```
 
-#### 4. **Status History** (Historial de Estados)
+#### 4. **StatusHistory** (Status Change Tracking)
 
 ```sql
-- id: UUID (PK)
-- patient_id: UUID (FK to patients)
-- status_id: UUID (FK to statuses)
-- changed_at: datetime
+- id: UUID (Primary Key)
+- patient_id: UUID (Foreign Key to patients)
+- status_id: UUID (Foreign Key to statuses)
+- changed_at: datetime (Status change timestamp)
 ```
 
-### 🌳 Jerarquía de Estados Predefinida
+### 🌳 Predefined Status Hierarchy
 
 ```
 Scheduled
@@ -119,231 +124,270 @@ Scheduled
 └── No-Show
 ```
 
-## 🚀 Configuración y Ejecución
+### Database Relationships
 
-### Opción 1: Desarrollo Nativo (Bun)
+- **Provider** → **Patients** (One-to-Many)
+- **Status** → **Patients** (One-to-Many)
+- **Status** → **Status** (Self-referencing for hierarchy)
+- **Patient** → **StatusHistory** (One-to-Many)
+- **Status** → **StatusHistory** (One-to-Many)
 
-#### 1. Instalar Dependencias
+## 🚀 Setup and Execution
+
+### Option 1: Native Development (Bun)
+
+#### 1. Install Dependencies
 
 ```bash
-# Desde la raíz del monorepo
+# From monorepo root
 bun install
 
-# O desde el directorio del backend
+# Or from backend directory
 cd apps/backend && bun install
 ```
 
-#### 2. Configurar Variables de Entorno
+#### 2. Environment Configuration
 
-Crea un archivo `.env` en `apps/backend/` con:
+Create a `.env` file in `apps/backend/` with:
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/technical_challenge?schema=public"
+PORT=3000
+NODE_ENV=development
 ```
 
-#### 3. Configurar Base de Datos
+#### 3. Database Setup
 
 ```bash
-# Generar cliente de Prisma
+# Generate Prisma client
 bun run prisma:generate
 
-# Sincronizar esquema con la BD
+# Sync schema with database
 bun run prisma:push
 
-# Poblar con datos iniciales
+# Seed with initial data
 bun run prisma:seed
 ```
 
-#### 4. Ejecutar Servidor
+#### 4. Start Development Server
 
 ```bash
-# Modo desarrollo
+# Development mode with hot reload
 bun run dev
 
-# Modo producción
+# Production build and start
 bun run build
 bun run start:prod
 ```
 
-### Opción 2: Desarrollo con Docker (Recomendado)
+### Option 2: Docker Development (Recommended)
 
-#### Usando Scripts de Conveniencia
+#### Using Convenience Scripts
 
 ```bash
-# Iniciar todos los servicios (backend, frontend, BD, adminer)
+# Start all services (backend, frontend, database, adminer)
 ./docker-scripts.sh dev
 
-# Solo backend
+# Backend only
 ./docker-scripts.sh dev-backend
 
-# Ver logs
+# View logs
 ./docker-scripts.sh logs-backend
 
-# Acceder a shell del backend
+# Access backend shell
 ./docker-scripts.sh shell-backend
 ```
 
-#### Usando Docker Compose Directamente
+#### Direct Docker Compose Usage
 
 ```bash
-# Construir e iniciar servicios
+# Build and start all services
 docker-compose up --build
 
-# Solo backend
+# Backend only
 docker-compose up backend
 
-# En segundo plano
+# Background mode
 docker-compose up -d
 ```
 
-### 🔧 Comandos de Prisma Disponibles
+### Available Prisma Commands
 
 ```bash
-# Generar cliente
+# Generate Prisma client
 bun run prisma:generate
 
-# Push esquema a BD
+# Push schema to database
 bun run prisma:push
 
-# Crear migración
+# Create migration
 bun run prisma:migrate
 
-# Reset BD
+# Reset database
 bun run prisma:reset
 
-# Ejecutar seed
+# Run seed script
 bun run prisma:seed
 
-# Abrir Prisma Studio
+# Open Prisma Studio
 bun run prisma:studio
 ```
 
-## 🐳 Desarrollo con Docker
+## 🐳 Docker Development
 
-### Servicios Disponibles
+### Available Services
 
-- **Backend**: http://localhost:3000 (API NestJS)
-- **Frontend**: http://localhost:3001 (Next.js App)
-- **PostgreSQL**: localhost:5432 (Base de datos)
-- **Adminer**: http://localhost:8080 (Gestión de BD)
+- **Backend**: http://localhost:3000 (NestJS API)
+- **Frontend**: http://localhost:3001 (Next.js Application)
+- **PostgreSQL**: localhost:5432 (Database)
+- **Adminer**: http://localhost:8080 (Database management)
 
-### Comandos de Docker
+### Docker Commands
 
 ```bash
-# Gestión principal
-./docker-scripts.sh dev           # Iniciar desarrollo completo
-./docker-scripts.sh status        # Ver estado de servicios
-./docker-scripts.sh stop          # Detener servicios
-./docker-scripts.sh restart       # Reiniciar servicios
-./docker-scripts.sh clean         # Limpiar todo
+# Main management
+./docker-scripts.sh dev           # Start complete development environment
+./docker-scripts.sh status        # Check service status
+./docker-scripts.sh stop          # Stop all services
+./docker-scripts.sh restart       # Restart all services
+./docker-scripts.sh clean         # Clean up everything
 
 # Logs
-./docker-scripts.sh logs          # Ver todos los logs
-./docker-scripts.sh logs-backend  # Solo logs backend
-./docker-scripts.sh logs-frontend # Solo logs frontend
-./docker-scripts.sh logs-db       # Solo logs base de datos
+./docker-scripts.sh logs          # View all logs
+./docker-scripts.sh logs-backend  # Backend logs only
+./docker-scripts.sh logs-frontend # Frontend logs only
+./docker-scripts.sh logs-db       # Database logs only
 
-# Shells
-./docker-scripts.sh shell-backend  # Terminal en backend
-./docker-scripts.sh shell-frontend # Terminal en frontend
-./docker-scripts.sh shell-db       # Terminal en PostgreSQL
+# Shell access
+./docker-scripts.sh shell-backend  # Backend terminal
+./docker-scripts.sh shell-frontend # Frontend terminal
+./docker-scripts.sh shell-db       # PostgreSQL terminal
 
-# Base de datos
-./docker-scripts.sh db-reset       # ⚠️ Reiniciar base de datos
+# Database management
+./docker-scripts.sh db-reset       # ⚠️ Reset database (destructive)
 ```
 
-### Características de Docker
+### Docker Features
 
-- ✅ **Hot reload** para desarrollo
-- ✅ **Multi-stage builds** para optimización
-- ✅ **Health checks** automáticos
-- ✅ **Volúmenes** para persistencia
-- ✅ **Networking** interno configurado
-- ✅ **Variables de entorno** gestionadas
+- ✅ **Hot reload** for development
+- ✅ **Multi-stage builds** for optimization
+- ✅ **Automatic health checks**
+- ✅ **Persistent volumes** for data
+- ✅ **Internal networking** configuration
+- ✅ **Environment variable** management
 
-## 📚 API Endpoints
+## 📚 API Documentation
 
-Todas las rutas tienen el prefijo `/api`. Ejemplo: `http://localhost:3000/api/patients`
+All routes are prefixed with `/api`. Example: `http://localhost:3000/api/patients`
 
-### 🔍 Proveedores (`/api/providers`)
+### 🔍 Providers (`/api/providers`)
 
-| Método | Endpoint                   | Descripción                  |
-| ------ | -------------------------- | ---------------------------- |
-| GET    | `/api/providers`           | Listar todos los proveedores |
-| GET    | `/api/providers/:id`       | Obtener proveedor específico |
-| GET    | `/api/providers/:id/stats` | Estadísticas del proveedor   |
-| POST   | `/api/providers`           | Crear nuevo proveedor        |
+| Method | Endpoint                   | Description             |
+| ------ | -------------------------- | ----------------------- |
+| GET    | `/api/providers`           | List all providers      |
+| GET    | `/api/providers/:id`       | Get specific provider   |
+| GET    | `/api/providers/:id/stats` | Get provider statistics |
+| POST   | `/api/providers`           | Create new provider     |
 
-#### Ejemplo POST `/api/providers`:
+#### Example POST `/api/providers`:
 
 ```json
 {
-	"full_name": "Dr. Juan Pérez",
-	"specialty": "Cardiología"
+	"full_name": "Dr. John Smith",
+	"specialty": "Cardiology"
 }
 ```
 
-### 👥 Pacientes (`/api/patients`)
-
-| Método | Endpoint                           | Descripción                    |
-| ------ | ---------------------------------- | ------------------------------ |
-| GET    | `/api/patients`                    | Listar todos los pacientes     |
-| GET    | `/api/patients?provider=:id`       | Pacientes por proveedor        |
-| GET    | `/api/patients?status=:id`         | Pacientes por estado           |
-| GET    | `/api/patients/:id`                | Obtener paciente específico    |
-| GET    | `/api/patients/:id/status-history` | Historial de estados           |
-| POST   | `/api/patients`                    | Crear nuevo paciente           |
-| PATCH  | `/api/patients/:id/status`         | Actualizar estado del paciente |
-
-#### Ejemplo POST `/api/patients`:
+#### Response Format:
 
 ```json
 {
-	"full_name": "María González",
-	"email": "maria@email.com",
-	"phone": "+52 555 123 4567",
-	"provider_id": "uuid-del-proveedor",
-	"status_id": "uuid-del-estado"
+	"message": "Provider created successfully",
+	"data": {
+		"id": "uuid",
+		"full_name": "Dr. John Smith",
+		"specialty": "Cardiology",
+		"created_at": "2024-01-15T10:30:00.000Z"
+	}
 }
 ```
 
-#### Ejemplo PATCH `/api/patients/:id/status`:
+### 👥 Patients (`/api/patients`)
+
+| Method | Endpoint                           | Description                 |
+| ------ | ---------------------------------- | --------------------------- |
+| GET    | `/api/patients`                    | List all patients           |
+| GET    | `/api/patients?provider=:id`       | Filter patients by provider |
+| GET    | `/api/patients?status=:id`         | Filter patients by status   |
+| GET    | `/api/patients/:id`                | Get specific patient        |
+| GET    | `/api/patients/:id/status-history` | Get patient status history  |
+| POST   | `/api/patients`                    | Create new patient          |
+| PATCH  | `/api/patients/:id/status`         | Update patient status       |
+
+#### Example POST `/api/patients`:
 
 ```json
 {
-	"status_id": "uuid-del-nuevo-estado"
+	"full_name": "Jane Doe",
+	"email": "jane.doe@email.com",
+	"phone": "+1 555 123 4567",
+	"provider_id": "provider-uuid",
+	"status_id": "status-uuid"
 }
 ```
 
-### 📊 Estados (`/api/statuses`)
+#### Example PATCH `/api/patients/:id/status`:
 
-| Método | Endpoint                        | Descripción                  |
-| ------ | ------------------------------- | ---------------------------- |
-| GET    | `/api/statuses`                 | Listar todos los estados     |
-| GET    | `/api/statuses/hierarchy`       | Obtener jerarquía de estados |
-| GET    | `/api/statuses/stats`           | Estadísticas de estados      |
-| GET    | `/api/statuses/:id`             | Obtener estado específico    |
-| GET    | `/api/statuses/:id/path`        | Ruta completa del estado     |
-| GET    | `/api/statuses/:id/children`    | Estados hijos                |
-| GET    | `/api/statuses/:id/transitions` | Transiciones disponibles     |
+```json
+{
+	"status_id": "new-status-uuid"
+}
+```
 
-## 🧪 Health Check
+### 📊 Statuses (`/api/statuses`)
 
-Sistema de monitoreo que verifica el estado de la aplicación y sus dependencias.
+| Method | Endpoint                        | Description               |
+| ------ | ------------------------------- | ------------------------- |
+| GET    | `/api/statuses`                 | List all statuses         |
+| GET    | `/api/statuses/hierarchy`       | Get status hierarchy      |
+| GET    | `/api/statuses/stats`           | Get status statistics     |
+| GET    | `/api/statuses/:id`             | Get specific status       |
+| GET    | `/api/statuses/:id/path`        | Get complete status path  |
+| GET    | `/api/statuses/:id/children`    | Get child statuses        |
+| GET    | `/api/statuses/:id/transitions` | Get available transitions |
 
-### Endpoints Disponibles
+### Query Parameters
 
-| Método | Endpoint               | Descripción                  |
+#### Patient Filtering
+
+```bash
+# Filter by provider
+GET /api/patients?provider=uuid
+
+# Filter by status
+GET /api/patients?status=uuid
+
+# Combine filters (if supported)
+GET /api/patients?provider=uuid&status=uuid
+```
+
+## 🧪 Health Check System
+
+Comprehensive monitoring system that verifies application health and dependencies.
+
+### Available Endpoints
+
+| Method | Endpoint               | Description                  |
 | ------ | ---------------------- | ---------------------------- |
-| GET    | `/api/health`          | Health check completo        |
+| GET    | `/api/health`          | Complete health check        |
 | GET    | `/api/health/ready`    | Readiness check (Kubernetes) |
 | GET    | `/api/health/live`     | Liveness check (Kubernetes)  |
-| GET    | `/api/health/simple`   | Status simple y rápido       |
-| GET    | `/api/health/database` | Solo verificación de BD      |
+| GET    | `/api/health/simple`   | Simple status check          |
+| GET    | `/api/health/database` | Database connection check    |
 
-### Health Check Completo - `GET /api/health`
+### Complete Health Check - `GET /api/health`
 
-Proporciona un estado completo del sistema:
+Provides comprehensive system status:
 
 ```json
 {
@@ -372,13 +416,13 @@ Proporciona un estado completo del sistema:
 }
 ```
 
-**Estados posibles:**
+**Possible Status Values:**
 
-- `healthy`: Todo funcionando correctamente
-- `degraded`: Funcionando con advertencias (ej. alta memoria)
-- `unhealthy`: Sistema no saludable (ej. BD desconectada)
+- `healthy`: All systems operational
+- `degraded`: Operational with warnings (e.g., high memory usage)
+- `unhealthy`: System not healthy (e.g., database disconnected)
 
-### Configuración para Kubernetes
+### Kubernetes Configuration
 
 ```yaml
 # Liveness Probe
@@ -398,15 +442,15 @@ readinessProbe:
   periodSeconds: 5
 ```
 
-## 🔧 Utilidades Comunes
+## 🔧 Common Utilities
 
-Sistema de utilidades para respuestas consistentes y manejo de errores.
+Standardized utility system for consistent responses and error handling.
 
-### Interfaces de Respuesta
+### Response Interfaces
 
 #### `ApiResponse<T>`
 
-Interfaz estándar para todas las respuestas exitosas:
+Standard interface for all successful responses:
 
 ```typescript
 interface ApiResponse<T = any> {
@@ -418,7 +462,7 @@ interface ApiResponse<T = any> {
 
 #### `ApiErrorResponse`
 
-Interfaz para respuestas de error formateadas:
+Interface for formatted error responses:
 
 ```typescript
 interface ApiErrorResponse {
@@ -430,37 +474,37 @@ interface ApiErrorResponse {
 }
 ```
 
-### Funciones de Respuesta
+### Response Utility Functions
 
-#### Funciones Básicas
+#### Basic Functions
 
 ```typescript
-// Respuesta básica de éxito
+// Basic success response
 createSuccessResponse<T>(message: string, data: T, count?: number): ApiResponse<T>
 
-// Para datos únicos
+// Single data response
 createDataResponse<T>(message: string, data: T): ApiResponse<T>
 ```
 
-#### Funciones Específicas por Operación
+#### Operation-Specific Functions
 
 ```typescript
-// Para recursos creados (POST)
+// For created resources (POST)
 createCreatedResponse<T>(resourceName: string, data: T): ApiResponse<T>
 
-// Para recursos actualizados (PUT/PATCH)
+// For updated resources (PUT/PATCH)
 createUpdatedResponse<T>(resourceName: string, data: T): ApiResponse<T>
 
-// Para un recurso recuperado (GET /:id)
+// For retrieved single resource (GET /:id)
 createRetrievedResponse<T>(resourceName: string, data: T): ApiResponse<T>
 
-// Para múltiples recursos (GET)
+// For multiple resources (GET)
 createRetrievedListResponse<T>(resourceName: string, data: T[]): ApiResponse<T[]>
 ```
 
-#### Ejemplo de Uso
+#### Usage Example
 
-**Antes:**
+**Before:**
 
 ```typescript
 @Get()
@@ -474,7 +518,7 @@ async findAll() {
 }
 ```
 
-**Después:**
+**After:**
 
 ```typescript
 import { ApiResponse, createRetrievedListResponse } from '../common'
@@ -486,25 +530,25 @@ async findAll(): Promise<ApiResponse> {
 }
 ```
 
-## 🛡️ Manejo de Errores
+## 🛡️ Error Handling
 
-El `GlobalExceptionFilter` captura y formatea automáticamente todos los errores:
+The `GlobalExceptionFilter` automatically captures and formats all errors:
 
-### Errores Manejados
+### Handled Error Types
 
-1. **Excepciones HTTP de NestJS**: `NotFoundException`, `ConflictException`, etc.
-2. **Errores de Prisma**: Códigos específicos de base de datos
-3. **Errores de Validación**: Del ValidationPipe
-4. **Errores Inesperados**: Errores internos del servidor
+1. **NestJS HTTP Exceptions**: `NotFoundException`, `ConflictException`, etc.
+2. **Prisma Errors**: Specific database error codes
+3. **Validation Errors**: From ValidationPipe
+4. **Unexpected Errors**: Internal server errors
 
-### Códigos de Error de Prisma
+### Prisma Error Codes
 
-- `P2002`: Violación de restricción única → `409 Conflict`
-- `P2025`: Registro no encontrado → `404 Not Found`
-- `P2003`: Violación de clave foránea → `400 Bad Request`
-- `P2014`: Violación de relación requerida → `400 Bad Request`
+- `P2002`: Unique constraint violation → `409 Conflict`
+- `P2025`: Record not found → `404 Not Found`
+- `P2003`: Foreign key constraint violation → `400 Bad Request`
+- `P2014`: Required relation violation → `400 Bad Request`
 
-### Ejemplo de Error Formateado
+### Formatted Error Example
 
 ```json
 {
@@ -516,26 +560,26 @@ El `GlobalExceptionFilter` captura y formatea automáticamente todos los errores
 }
 ```
 
-### Configuración
+### Configuration
 
-El filtro está configurado globalmente en `main.ts`:
+The filter is globally configured in `main.ts`:
 
 ```typescript
 app.useGlobalFilters(new GlobalExceptionFilter())
 ```
 
-## 🔍 Validaciones
+## 🔍 Validation System
 
-### Validaciones Implementadas
+### Implemented Validations
 
-- ✅ **Validación de DTOs** con `class-validator`
-- ✅ **Transformación automática** de datos
-- ✅ **Validación de relaciones** (proveedor y estado existen)
-- ✅ **Emails únicos** en pacientes
-- ✅ **Validación de transiciones** de estado
-- ✅ **Historial automático** de estados
+- ✅ **DTO Validation** with `class-validator`
+- ✅ **Automatic Data Transformation**
+- ✅ **Relationship Validation** (provider and status existence)
+- ✅ **Unique Email Validation** for patients
+- ✅ **Status Transition Validation**
+- ✅ **Automatic Status History** tracking
 
-### Configuración Global
+### Global Configuration
 
 ```typescript
 app.useGlobalPipes(
@@ -547,9 +591,43 @@ app.useGlobalPipes(
 )
 ```
 
-## 🌐 Configuración de CORS
+### DTO Examples
 
-CORS configurado para permitir conexiones desde el frontend:
+#### Create Patient DTO
+
+```typescript
+export class CreatePatientDto {
+	@IsString()
+	@IsNotEmpty()
+	full_name: string
+
+	@IsEmail()
+	email: string
+
+	@IsString()
+	@IsNotEmpty()
+	phone: string
+
+	@IsUUID()
+	provider_id: string
+
+	@IsUUID()
+	status_id: string
+}
+```
+
+#### Update Status DTO
+
+```typescript
+export class UpdatePatientStatusDto {
+	@IsUUID()
+	status_id: string
+}
+```
+
+## 🌐 CORS Configuration
+
+CORS configured to allow connections from the frontend:
 
 ```typescript
 app.enableCors({
@@ -559,66 +637,66 @@ app.enableCors({
 })
 ```
 
-## 🧪 Datos de Prueba
+## 🧪 Test Data
 
-El seed incluye:
+The seed script includes:
 
-- **4 Proveedores** con diferentes especialidades:
-  - Dr. María García López (Cardiología)
-  - Dr. Juan Carlos Mendoza (Medicina General)
-  - Dra. Ana Isabel Rodríguez (Pediatría)
-  - Dr. Carlos Alberto Vega (Dermatología)
+- **4 Providers** with different specialties:
+  - Dr. María García López (Cardiology)
+  - Dr. Juan Carlos Mendoza (General Medicine)
+  - Dra. Ana Isabel Rodríguez (Pediatrics)
+  - Dr. Carlos Alberto Vega (Dermatology)
 
-- **5 Estados** con jerarquía completa:
+- **5 Statuses** with complete hierarchy:
   - Scheduled → Checked-In → In Consultation
   - Scheduled → Checked-In → Cancelled
   - Scheduled → No-Show
 
-- **4 Pacientes** de ejemplo con diferentes estados
-- **Historial de estados** para demostrar funcionalidad
+- **4 Sample Patients** with different statuses
+- **Status History** to demonstrate functionality
 
-### Ejecutar Seed
+### Run Seed
 
 ```bash
 bun run prisma:seed
 ```
 
-## 🔗 Integración con Monorepo
+## 🔗 Monorepo Integration
 
-### Scripts del Monorepo
+### Monorepo Scripts
 
 ```bash
-# Desde la raíz del proyecto
-bun dev:backend          # Ejecutar solo backend
-bun dev                  # Ejecutar backend + frontend
-bun build:backend        # Build del backend
-bun lint:backend         # Lint del backend
-bun test:backend         # Tests del backend
+# From project root
+bun dev:backend          # Run backend only
+bun dev                  # Run backend + frontend
+bun build:backend        # Build backend
+bun lint:backend         # Lint backend
+bun test:backend         # Test backend
 ```
 
-### Estructura del Monorepo
+### Monorepo Structure
 
 ```
 technical-challenge/
 ├── apps/
-│   ├── backend/         # Este proyecto
-│   └── frontend/        # Next.js app
+│   ├── backend/         # This project
+│   └── frontend/        # Next.js application
 ├── packages/
-│   ├── eslint-config/   # Configuración ESLint compartida
-│   └── typescript-config/ # Configuración TS compartida
-├── docker-compose.yml   # Orquestación de servicios
-└── docker-scripts.sh    # Scripts de conveniencia
+│   ├── eslint-config/   # Shared ESLint configuration
+│   └── typescript-config/ # Shared TypeScript configuration
+├── docker-compose.yml   # Service orchestration
+└── docker-scripts.sh    # Convenience scripts
 ```
 
-### Variables de Entorno Compartidas
+### Shared Environment Variables
 
-El backend utiliza variables de entorno que pueden ser configuradas a nivel de monorepo:
+The backend uses environment variables that can be configured at the monorepo level:
 
 ```env
-# Base de datos
+# Database
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/technical_challenge?schema=public"
 
-# Servidor
+# Server
 PORT=3000
 NODE_ENV=development
 
@@ -626,84 +704,99 @@ NODE_ENV=development
 FRONTEND_URL=http://localhost:3001
 ```
 
-## 🚦 Formato de Respuestas
+## 📊 Response Format Standards
 
-Todas las respuestas siguen el formato estándar:
+All responses follow the standard format:
 
-### Respuestas Exitosas
+### Successful Responses
 
 ```json
 {
-	"message": "Descripción de la operación",
+	"message": "Operation description",
 	"data": {
-		/* datos */
+		/* response data */
 	},
-	"count": 0 // opcional para listas
+	"count": 0 // optional for lists
 }
 ```
 
-### Respuestas de Error
+### Error Responses
 
 ```json
 {
 	"statusCode": 404,
-	"message": "Descripción del error",
-	"error": "Tipo de error",
+	"message": "Error description",
+	"error": "Error type",
 	"timestamp": "2024-01-15T10:30:00.000Z",
 	"path": "/api/endpoint"
 }
 ```
 
-## 🔧 Scripts Disponibles
+## 🔧 Available Scripts
 
 ```bash
-# Desarrollo
-bun run dev              # Iniciar en modo desarrollo
-bun run build            # Compilar para producción
-bun run start:prod       # Iniciar en modo producción
+# Development
+bun run dev              # Start development mode
+bun run build            # Build for production
+bun run start:prod       # Start production mode
 
 # Testing
-bun run test             # Ejecutar tests unitarios
-bun run test:e2e         # Ejecutar tests e2e
-bun run test:cov         # Ejecutar tests con coverage
+bun run test             # Run unit tests
+bun run test:e2e         # Run end-to-end tests
+bun run test:cov         # Run tests with coverage
 
-# Calidad de código
-bun run lint             # Verificar lint
-bun run lint:fix         # Corregir problemas de lint
-bun run check-types      # Verificar tipos TypeScript
+# Code Quality
+bun run lint             # Check linting
+bun run lint:fix         # Fix linting issues
+bun run check-types      # Check TypeScript types
 
-# Base de datos
-bun run prisma:generate  # Generar cliente Prisma
-bun run prisma:push      # Pushear esquema a BD
-bun run prisma:migrate   # Crear migración
-bun run prisma:reset     # Reset completo de BD
-bun run prisma:seed      # Poblar con datos de prueba
-bun run prisma:studio    # Abrir Prisma Studio
+# Database
+bun run prisma:generate  # Generate Prisma client
+bun run prisma:push      # Push schema to database
+bun run prisma:migrate   # Create migration
+bun run prisma:reset     # Reset database completely
+bun run prisma:seed      # Seed with test data
+bun run prisma:studio    # Open Prisma Studio
 ```
 
-## 📊 Estado del Proyecto
+## 📊 Project Status
 
-- ✅ **Backend completamente funcional**
-- ✅ **API RESTful con CRUD completo**
-- ✅ **Sistema de health checks**
-- ✅ **Manejo robusto de errores**
-- ✅ **Respuestas consistentes**
-- ✅ **Validaciones completas**
-- ✅ **Documentación unificada**
-- ✅ **Código limpio y optimizado**
-- ✅ **Integración con monorepo**
-- ✅ **Docker optimizado**
-- ✅ **Base de datos con Prisma**
-- ✅ **Datos de prueba incluidos**
+- ✅ **Fully Functional Backend**
+- ✅ **Complete RESTful API with CRUD operations**
+- ✅ **Comprehensive Health Check System**
+- ✅ **Robust Error Handling**
+- ✅ **Consistent Response Formatting**
+- ✅ **Complete Validation System**
+- ✅ **Unified Documentation**
+- ✅ **Clean and Optimized Code**
+- ✅ **Monorepo Integration**
+- ✅ **Docker Optimization**
+- ✅ **Prisma Database Integration**
+- ✅ **Included Test Data**
 
-## 🎯 Próximos Pasos
+## 🎯 Next Steps
 
-1. **Frontend Development** - Implementar interfaces de usuario
-2. **API Integration** - Conectar frontend con backend
-3. **Testing** - Agregar tests unitarios y e2e
-4. **Documentation** - Swagger/OpenAPI docs
-5. **Deployment** - Configuración de producción
+1. **Frontend Development** - Implement user interfaces
+2. **API Integration** - Connect frontend with backend
+3. **Testing** - Add unit and e2e tests
+4. **Documentation** - Swagger/OpenAPI documentation
+5. **Deployment** - Production configuration
+6. **Performance Optimization** - Caching and optimization
+7. **Security** - Authentication and authorization
+8. **Monitoring** - Logging and metrics
+
+## 🛠️ Technology Stack
+
+- **Framework**: NestJS 11.x
+- **Language**: TypeScript 5.8
+- **Database**: PostgreSQL with Prisma ORM
+- **Runtime**: Bun 1.x
+- **Containerization**: Docker with multi-stage builds
+- **Monorepo**: TurboRepo
+- **Validation**: class-validator & class-transformer
+- **Testing**: Jest
+- **Linting**: ESLint with shared config
 
 ---
 
-**Desarrollado con NestJS + Prisma + PostgreSQL en monorepo TurboRepo** 🚀
+**Developed with NestJS + Prisma + PostgreSQL in TurboRepo Monorepo** 🚀
