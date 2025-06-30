@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { formatDate } from 'src/lib';
 import { Patient, Status } from 'src/models';
 import { getStatusBadgeColor } from 'src/lib/getStatusBadgeColor';
+import { StatusDropdown } from './StatusDropdown';
 
 interface Iprops {
 	patients: Patient[];
@@ -10,7 +11,7 @@ interface Iprops {
 	handleStatusUpdate?: (patientId: string, newStatusId: string) => void;
 }
 
-const TableMode: React.FC<Iprops> = ({ patients }) => {
+const TableMode: React.FC<Iprops> = ({ patients, statuses = [], handleStatusUpdate }) => {
 	return (
 		<div className="overflow-x-auto">
 			<table className="min-w-full divide-y divide-gray-200">
@@ -69,11 +70,14 @@ const TableMode: React.FC<Iprops> = ({ patients }) => {
 							</td>
 							<td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
 								<div className="flex space-x-3">
-									{/* <StatusDropdown
-                            currentStatusId={patient.status_id}
-                            statuses={statuses}
-                            onStatusChange={(newStatusId) => handleStatusUpdate(patient.id, newStatusId)}
-                          /> */}
+									{handleStatusUpdate && statuses.length > 0 && (
+										<StatusDropdown
+											currentStatusId={patient.status_id}
+											statuses={statuses}
+											onStatusChange={newStatusId => handleStatusUpdate(patient.id, newStatusId)}
+											patientId={patient.id}
+										/>
+									)}
 									<Link
 										href={`/patients/${patient.id}/history`}
 										className="text-sm text-blue-600 hover:text-blue-900"

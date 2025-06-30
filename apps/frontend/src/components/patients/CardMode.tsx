@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Patient, Status } from 'src/models';
 import { getStatusBadgeColor } from 'src/lib/getStatusBadgeColor';
+import { StatusDropdown } from './StatusDropdown';
 
 interface Iprops {
 	patients: Patient[];
@@ -9,7 +10,7 @@ interface Iprops {
 	handleStatusUpdate?: (patientId: string, newStatusId: string) => void;
 }
 
-const CardMode: React.FC<Iprops> = ({ patients }) => {
+const CardMode: React.FC<Iprops> = ({ patients, statuses = [], handleStatusUpdate }) => {
 	return (
 		<div className="p-6">
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -47,11 +48,14 @@ const CardMode: React.FC<Iprops> = ({ patients }) => {
 						</div>
 
 						<div className="flex items-center justify-between">
-							{/* <StatusDropdown
-                        currentStatusId={patient.status_id}
-                        statuses={statuses}
-                        onStatusChange={(newStatusId) => handleStatusUpdate(patient.id, newStatusId)}
-                      /> */}
+							{handleStatusUpdate && statuses.length > 0 && (
+								<StatusDropdown
+									currentStatusId={patient.status_id}
+									statuses={statuses}
+									onStatusChange={newStatusId => handleStatusUpdate(patient.id, newStatusId)}
+									patientId={patient.id}
+								/>
+							)}
 							<Link
 								href={`/patients/${patient.id}/history`}
 								className="text-xs text-blue-600 hover:text-blue-900"

@@ -1,5 +1,12 @@
 'use client';
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, {
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+	ReactNode,
+	useCallback
+} from 'react';
 import { AxiosResponse } from 'axios';
 import { Provider } from '../models/provider';
 import { Status } from '../models/status';
@@ -22,7 +29,7 @@ export const StatusProviderProvider = ({ children }: { children: ReactNode }) =>
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	const fetchData = async () => {
+	const fetchData = useCallback(async () => {
 		setLoading(true);
 		setError(null);
 		try {
@@ -39,18 +46,25 @@ export const StatusProviderProvider = ({ children }: { children: ReactNode }) =>
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [fetchData]);
+
+	const contextValue = React.useMemo(
+		() => ({
+			statuses,
+			providers,
+			loading,
+			error,
+			reload: fetchData
+		}),
+		[statuses, providers, loading, error, fetchData]
+	);
 
 	return (
-		<StatusProviderContext.Provider
-			value={{ statuses, providers, loading, error, reload: fetchData }}
-		>
-			{children}
-		</StatusProviderContext.Provider>
+		<StatusProviderContext.Provider value={contextValue}>{children}</StatusProviderContext.Provider>
 	);
 };
 

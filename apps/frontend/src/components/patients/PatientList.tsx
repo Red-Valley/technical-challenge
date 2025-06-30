@@ -1,19 +1,60 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useStatusProvider } from 'src/context/StatusProviderContext';
 import { useApi } from 'src/hooks';
 import { PatientsApiResponse } from 'src/models';
-import { getAllPatients } from 'src/services/patientsService';
+import { getAllPatients, updatePatientStatus } from 'src/services/patientsService';
 import { CardMode } from './CardMode';
 import { EmptyPatients } from './EmptyPatients';
 import { TableMode } from './TableMode';
+import { Toast } from '../ui/Toast';
 
 const PatientList = () => {
 	const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
-	const { data, loading, error } = useApi<PatientsApiResponse, undefined>(getAllPatients, {
+	const [toast, setToast] = useState<{
+		message: string;
+		type: 'success' | 'error';
+		isVisible: boolean;
+	}>({
+		message: '',
+		type: 'success',
+		isVisible: false
+	});
+
+	const { statuses } = useStatusProvider();
+	const { data, loading, error, fetch } = useApi<PatientsApiResponse, undefined>(getAllPatients, {
 		autoFetch: true,
 		params: undefined
 	});
+
+	const handleStatusUpdate = async (patientId: string, newStatusId: string) => {
+		try {
+			await updatePatientStatus(patientId, newStatusId).call;
+			// Recargar la lista de pacientes después de la actualización
+			await fetch(undefined);
+
+			// Mostrar notificación de éxito
+			const newStatus = statuses.find(s => s.id === newStatusId);
+			setToast({
+				message: `Status actualizado exitosamente a ${newStatus?.name || 'nuevo status'}`,
+				type: 'success',
+				isVisible: true
+			});
+		} catch (error) {
+			console.error('Error updating patient status:', error);
+			// Mostrar notificación de error
+			setToast({
+				message: 'Error al actualizar el status del paciente',
+				type: 'error',
+				isVisible: true
+			});
+		}
+	};
+
+	const closeToast = () => {
+		setToast(prev => ({ ...prev, isVisible: false }));
+	};
 
 	if (loading) {
 		return (
@@ -69,13 +110,29 @@ const PatientList = () => {
 				</div>
 
 				{viewMode === 'table' ? (
-					<TableMode patients={data?.data || []} />
+					<TableMode
+						patients={data?.data || []}
+						statuses={statuses}
+						handleStatusUpdate={handleStatusUpdate}
+					/>
 				) : (
-					<CardMode patients={data?.data || []} />
+					<CardMode
+						patients={data?.data || []}
+						statuses={statuses}
+						handleStatusUpdate={handleStatusUpdate}
+					/>
 				)}
 
 				{data?.data?.length === 0 && <EmptyPatients />}
 			</div>
+
+			{/* Toast de notificaciones */}
+			<Toast
+				message={toast.message}
+				type={toast.type}
+				isVisible={toast.isVisible}
+				onClose={closeToast}
+			/>
 		</main>
 	);
 };

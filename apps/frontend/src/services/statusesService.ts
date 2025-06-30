@@ -15,3 +15,16 @@ export const getAllStatuses = (): UseApiCall<{ data: Status[] }> => {
 		})
 	};
 };
+
+export const getStatusTransitions = (statusId: string): UseApiCall<{ data: Status[] }> => {
+	const controller = loadAbortController();
+	return {
+		controller,
+		call: axiosInstance.get<{ data: Status[] }>(
+			`${BASE_URL}/api/statuses/${statusId}/transitions`,
+			{
+				signal: controller.signal
+			}
+		)
+	};
+};
