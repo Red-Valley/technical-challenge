@@ -1,5 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
+import patientController from './controllers/patient-controller';
+import statusController from './controllers/status-controller';
+import statusHistoryController from './controllers/status-history-controller';
+import providerController from './controllers/provider-controller';
+import API_ROTES from './routes/api-routes';
 
 /**
  * Server
@@ -18,11 +23,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 /**
- * Routes
+ * Controllers
  */
-app.get('/api/greet', (req, res) => {
-    res.json('Hello, TypeScript Express!');
-});
+app.use(API_ROTES.patient, patientController);
+app.use(API_ROTES.status, statusController);
+app.use(API_ROTES.statusHistory, statusHistoryController);
+app.use(API_ROTES.provider, providerController);
 
 /**
  * Execution
