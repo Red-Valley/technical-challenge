@@ -1,6 +1,6 @@
 import express from 'express';
 import { PROVIDER_ROUTES } from '../routes/controller-routes';
-import providerDBctions from '../database/actions/provider-db-actions';
+import providerDBActions from '../database/actions/provider-db-actions';
 import { validate as uuidValidate } from 'uuid';
 import LANG from '../lang';
 
@@ -18,7 +18,7 @@ providerController.get(PROVIDER_ROUTES.greet, (req, res) => {
 // *Creates a provider
 providerController.post(PROVIDER_ROUTES.create, async (req, res) => {
     try {
-        const result = await providerDBctions.create(req.body);
+        const result = await providerDBActions.create(req.body);
 
         res.status(201).json(result);
     } catch (error) {
@@ -31,7 +31,7 @@ providerController.post(PROVIDER_ROUTES.create, async (req, res) => {
 //Find all
 providerController.get(PROVIDER_ROUTES.findAll, async (req, res) => {
     try {
-        const result = await providerDBctions.findAll();
+        const result = await providerDBActions.findAll();
 
         res.json(result);
     } catch (error) {
@@ -45,7 +45,7 @@ providerController.get(PROVIDER_ROUTES.findAll, async (req, res) => {
 providerController.get(PROVIDER_ROUTES.findOneById, async (req, res) => {
     if (uuidValidate(req.params.id)) {
         try {
-            const result = await providerDBctions.findOneById(req.params.id);
+            const result = await providerDBActions.findOneById(req.params.id);
 
             res.json(result);
         } catch (error) {
@@ -63,7 +63,7 @@ providerController.get(PROVIDER_ROUTES.findOneById, async (req, res) => {
 // *Updates a provider
 providerController.put(PROVIDER_ROUTES.updateOneById, async (req, res) => {
     try {
-        const result = await providerDBctions.updateOneById(req.body);
+        const result = await providerDBActions.updateOneById(req.body);
 
         res.status(200).json(LANG.ENGLISH.operations.update);
     } catch (error) {
@@ -77,7 +77,7 @@ providerController.put(PROVIDER_ROUTES.updateOneById, async (req, res) => {
 providerController.delete(PROVIDER_ROUTES.deleteOneById, async (req, res) => {
     if (uuidValidate(req.params.id)) {
         try {
-            const result = await providerDBctions.deleteOneById(req.params.id);
+            const result = await providerDBActions.deleteOneById(req.params.id);
 
             res.status(200).json({
                 message: LANG.ENGLISH.operations.delete,

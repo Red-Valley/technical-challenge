@@ -11,9 +11,6 @@ export const PATIENT_ROUTES = coreActionRoutes;
 
 export const STATUS_ROUTES = coreActionRoutes;
 
-export const STATUS_HISTORY_ROUTES = {
-    greet: '/greet',
-    create: '/create'
-};
+export const STATUS_HISTORY_ROUTES = coreActionRoutes;
 
 export const PROVIDER_ROUTES = coreActionRoutes;
