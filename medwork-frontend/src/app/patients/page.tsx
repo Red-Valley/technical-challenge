@@ -7,13 +7,15 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CreatePatientModal from "@/components/CreatePatientModal";
+import ChangePatientStatusModal from "@/components/ChangePatientStatusModal";
+import ShowPatientStatusHistoryModal from "@/components/ShowPatientStatusHistoryModal";
 import { AxiosResponse } from "axios";
 import { Patient } from "../../constants/models";
 import { PATIENTS_QUERY_KEY } from "../../constants/queryKeys";
 
 export default function PatientsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  
+
   const {
     data: patients,
     error,
@@ -22,7 +24,7 @@ export default function PatientsPage() {
     queryKey: [PATIENTS_QUERY_KEY],
     queryFn: () => apiClient.get("/patients"),
   });
-  
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   return (
@@ -35,7 +37,7 @@ export default function PatientsPage() {
             Manage patients and their clinical information
           </p>
         </div>
-        <button 
+        <button
           onClick={() => setIsCreateModalOpen(true)}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
@@ -98,13 +100,25 @@ export default function PatientsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {patient.provider?.fullName || 'Unassigned'}
+                      {patient.provider?.fullName || "Unassigned"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                      {patient.status?.name || 'Unknown'}
-                    </span>
+                    <div className="flex items-center">
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                        {patient.status?.name || "Unknown"}
+                      </span>
+                      <ChangePatientStatusModal
+                        patientId={patient.id}
+                        currentStatusId={patient.statusId}
+                        currentStatusName={patient.status?.name||"Unknown"}
+                        patientName={patient.fullName}
+                      />
+                      <ShowPatientStatusHistoryModal
+                        patientId={patient.id}
+                        patientName={patient.fullName}
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3">
@@ -120,7 +134,7 @@ export default function PatientsPage() {
           </table>
         </div>
       </div>
-      
+
       {/* Create Patient Modal */}
       <CreatePatientModal
         isOpen={isCreateModalOpen}

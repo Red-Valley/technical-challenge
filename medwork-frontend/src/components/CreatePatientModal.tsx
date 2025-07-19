@@ -9,6 +9,8 @@ import { CreatePatientDto } from "@/constants/DTO";
 import { PATIENTS_QUERY_KEY, PROVIDERS_QUERY_KEY } from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { Provider } from "@/constants/models";
+import { AxiosError } from "axios";
+import { ApiResponse } from "@/constants/responses";
 
 interface CreatePatientModalProps {
   isOpen: boolean;
@@ -79,8 +81,12 @@ export default function CreatePatientModal({
         resetForm();
         setSubmitting(false);
       },
-      onError: () => {
+      onError: (error: unknown) => {
         setSubmitting(false);
+        alert(
+          (error as AxiosError<ApiResponse<null>>)?.response?.data?.message ||
+            "Error creating patient"
+        );
       },
     });
   };
@@ -234,4 +240,4 @@ export default function CreatePatientModal({
       </Formik>
     </Modal>
   );
-} 
+}

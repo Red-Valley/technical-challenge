@@ -159,6 +159,13 @@ export class PatientsService {
     });
   }
 
+  async findByFullName(fullName: string): Promise<Patient | null> {
+    return await this.patientRepository.findOne({
+      where: { fullName },
+      relations: ['provider', 'status'],
+    });
+  }
+
   private async isValidStatusTransition(
     currentStatusId: string,
     newStatusId: string,

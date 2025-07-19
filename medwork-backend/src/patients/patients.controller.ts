@@ -8,8 +8,15 @@ import {
   Delete,
   Query,
   ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
@@ -22,41 +29,51 @@ export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Post()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Crear un nuevo paciente',
-    description: 'Crea un nuevo paciente con la información proporcionada'
+    description: 'Crea un nuevo paciente con la información proporcionada',
   })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Paciente creado exitosamente',
-    type: PatientResponseDto 
+    type: PatientResponseDto,
   })
-  @ApiResponse({ 
-    status: 400, 
-    description: 'Datos inválidos' 
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos',
   })
   async create(@Body(ValidationPipe) createPatientDto: CreatePatientDto) {
+    // Check if patient with same name already exists
+    const existingPatient = await this.patientsService.findByFullName(
+      createPatientDto.fullName,
+    );
+    if (existingPatient) {
+      throw new BadRequestException(
+        `A patient with the name "${createPatientDto.fullName}" already exists`,
+      );
+    }
     return await this.patientsService.create(createPatientDto);
   }
 
   @Get()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Obtener todos los pacientes',
-    description: 'Retorna una lista de todos los pacientes. Puede filtrar por proveedor o estado.'
+    description:
+      'Retorna una lista de todos los pacientes. Puede filtrar por proveedor o estado.',
   })
-  @ApiQuery({ 
-    name: 'providerId', 
-    required: false, 
-    description: 'ID del proveedor para filtrar pacientes' 
+  @ApiQuery({
+    name: 'providerId',
+    required: false,
+    description: 'ID del proveedor para filtrar pacientes',
   })
-  @ApiQuery({ 
-    name: 'statusId', 
-    required: false, 
-    description: 'ID del estado para filtrar pacientes' 
+  @ApiQuery({
+    name: 'statusId',
+    required: false,
+    description: 'ID del estado para filtrar pacientes',
   })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Lista de pacientes obtenida exitosamente' 
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pacientes obtenida exitosamente',
   })
   async findAll(
     @Query('providerId') providerId?: string,
@@ -72,23 +89,23 @@ export class PatientsController {
   }
 
   @Get(':id')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Obtener un paciente específico',
-    description: 'Retorna la información detallada de un paciente por su ID'
+    description: 'Retorna la información detallada de un paciente por su ID',
   })
-  @ApiParam({ 
-    name: 'id', 
+  @ApiParam({
+    name: 'id',
     description: 'ID único del paciente',
-    example: '123e4567-e89b-12d3-a456-426614174000'
+    example: '123e4567-e89b-12d3-a456-426614174000',
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Paciente encontrado exitosamente',
-    type: PatientResponseDto 
+    type: PatientResponseDto,
   })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Paciente no encontrado' 
+  @ApiResponse({
+    status: 404,
+    description: 'Paciente no encontrado',
   })
   async findOne(@Param('id') id: string) {
     return await this.patientsService.findOne(id);
