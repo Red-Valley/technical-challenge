@@ -137,15 +137,25 @@ You should spend no more than **8 hours** on this task.
 
 Don’t worry if you can’t finish everything. What matters most is **how far you get** and **how you approach the problem**.
 
+# To start the project
 
 ### Run the server
 
-Use npm run dev for development with ts-node or npm run build followed by npm start for production environments after compilation.
+- First install all the dependencies with npm install.
+- You need to have a postgres server named 'postgres' with user 'postgres' and password 'postgres' to use the express app correctly.
+- Use npm run dev for development with ts-node or npm run build followed by npm start for production environments after compilation.
+- To reload the server and modify code you will need to commend lines 18 and 19 in file backend/src/database/migrations/index.js.
+- The first time you run the server some information needed to work is going to be saved in the postgres tables automatically (Statuses and one provider).
+
+### Run the React App
+- First install all dependencies with npm install command.
+- The run the command npm start to start the local dev server.
+- Make use of another port than 3000, or run the express backend first.
 
 ### DB Credentials
 Host	localhost
 Port	5432
-User	Home
+User	postgres
 Database	postgres
-Password	none
-Connection URL	postgresql://localhost
+Password	postgres
+Connection URL	localhost

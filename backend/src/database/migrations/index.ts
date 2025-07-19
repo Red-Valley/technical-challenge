@@ -13,10 +13,10 @@ const runDbMigrations = async () => {
         await client.query(createTables);
 
         /**
-         * !IMPORTANT if you want to modify code and reload automatically comment the lines (17, 18) below.
+         * !IMPORTANT if you want to modify code and reload automatically comment the lines (18, 19) below.
          */
-        // await client.query(createStatuses);
-        // await client.query(createAProvider);
+        await client.query(createStatuses);
+        await client.query(createAProvider);
 
         await client.query('COMMIT'); // commit transaction
 
