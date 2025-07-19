@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { seedStatuses } from './seeds/status.seed';
+import { seedProviders } from './seeds/providers.seed';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -18,7 +19,7 @@ async function runSeed() {
     console.log('Database connection established');
 
     await seedStatuses(dataSource);
-
+    await seedProviders(dataSource);
     console.log('Seed completed successfully!');
   } catch (error) {
     console.error('Error during seed:', error);
