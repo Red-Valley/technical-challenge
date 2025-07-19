@@ -1,138 +1,109 @@
-## Technical Challenge
+# Technical Challenge - VIP Medical Group
 
-### Background
+## Requisitos previos
 
-At VIP Medical Group, we are building a new internal module for our Medwork platform—a system that allows our staff to register patients, assign them to doctors (providers), and track their clinical status throughout their care journey.
+- Node.js (v18 o superior recomendado)
+- Yarn o npm
+- PostgreSQL
 
-In this challenge, you’ll simulate part of this module by creating a full-stack application that allows managing patients, providers, and clinical statuses with a parent-child hierarchy.
+---
 
-We are **not evaluating specific tools or patterns**. We simply want to understand how you think, how you code, and how you approach real-world problems. Be yourself.
+## 1. Clonar el repositorio
 
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd technical-challenge
+```
 
+---
 
-### What You Need to Build
+## 2. Backend
 
-A functional **full stack application** with the ability to:
+### Instalación de dependencias
 
-1. Create patients and providers
-2. Assign a provider to a patient
-3. Change the patient’s clinical status (with hierarchy)
-4. Display the status change history of a patient
+```bash
+cd red-valley-tecnical-challenge-backend
+yarn install
+# o
+npm install
+```
 
+### Configuración de la base de datos
 
+Asegúrate de tener PostgreSQL corriendo y crea una base de datos llamada `red_valley_test`.  
+Por defecto, la configuración es:
 
-### Database Schema
+- **Usuario:** scp682
+- **Contraseña:** komachi22
+- **Base de datos:** red_valley_test
+- **Host:** localhost
+- **Puerto:** 3008
 
-You must implement these 4 tables exactly as described below:
+Puedes modificar estos valores en `config/config.js` si lo necesitas.
 
-#### 1. `patients`
+### Migraciones y seeders
 
-| Field        | Type      |
-| ------------ | --------- |
-| id           | UUID      |
-| full\_name   | string    |
-| email        | string    |
-| phone        | string    |
-| provider\_id | UUID (FK) |
-| status\_id   | UUID (FK) |
-| created\_at  | datetime  |
+Ejecuta las migraciones para crear las tablas:
 
-#### 2. `providers`
+```bash
+yarn sequelize db:migrate
+# o
+npx sequelize db:migrate
+```
 
-| Field       | Type     |
-| ----------- | -------- |
-| id          | UUID     |
-| full\_name  | string   |
-| specialty   | string   |
-| created\_at | datetime |
+Carga los estados clínicos iniciales:
 
-#### 3. `statuses`
+```bash
+yarn sequelize db:seed:all
+# o
+npx sequelize db:seed:all
+```
 
-| Field      | Type                            |
-| ---------- | ------------------------------- |
-| id         | UUID                            |
-| name       | string                          |
-| parent\_id | UUID (nullable, FK to statuses) |
-| order      | integer                         |
+### Iniciar el servidor backend
 
-> This table allows parent-child status relationships.
+```bash
+yarn dev
+# o
+npm run dev
+```
 
-#### 4. `status_history`
+El backend estará disponible en `http://localhost:3001` (o el puerto configurado en `server.js`).
 
-| Field       | Type      |
-| ----------- | --------- |
-| id          | UUID      |
-| patient\_id | UUID (FK) |
-| status\_id  | UUID (FK) |
-| changed\_at | datetime  |
+---
 
+## 3. Frontend
 
+### Instalación de dependencias
 
-### Preloaded Statuses
+```bash
+cd ../red-valley-tecnical-challenge-frontend
+yarn install
+# o
+npm install
+```
 
-These statuses must be preloaded in the database:
+### Iniciar el servidor frontend
 
-* `Scheduled`
+```bash
+yarn dev
+# o
+npm run dev
+```
 
-  * `Checked-In`
+La aplicación estará disponible en `http://localhost:3000`.
 
-    * `In Consultation`
-    * `Cancelled`
-  * `No-Show`
+---
 
-You can use a seed script or migrations to insert them.
+## 4. Notas adicionales
 
+- El frontend está construido con Next.js, TailwindCSS, Redux Toolkit y Tanstack Query.
+- El backend utiliza Express, Sequelize y PostgreSQL.
+- Si necesitas cambiar la configuración de la base de datos, edita el archivo `red-valley-tecnical-challenge-backend/config/config.js`.
+- Para recargar los datos de estados clínicos, puedes volver a ejecutar el comando de seeders.
 
+---
 
-### Tech Stack
+## 5. Estructura de carpetas
 
-#### Backend
-
-* Language: TypeScript
-* Framework: **NestJS** or **Express**
-* Database: **PostgreSQL**, **MySQL**, or **MongoDB**
-* If you prefer, you may separate logic into small services (e.g., `patients-service`, `statuses-service`)
-
-  * Use **HTTP**, **events**, or **gRPC** for inter-service communication
-  * If using multiple services, you must include an **API Gateway**
-
-#### Frontend
-
-* Framework: **React** (Vite or Next.js)
-* Styling: **TailwindCSS**
-* State management: **Redux Toolkit** or **Zustand**
-* Data fetching: **Tanstack Query**
-
-
-
-### Required Screens
-
-You should include the following screens:
-
-1. Patient creation form
-2. Provider creation form
-3. Patient list (showing status and assigned provider)
-4. Patient status update control (e.g., dropdown)
-5. Patient status history (as timeline or list)
-
-> **Optional screen:** Provider list view.
-
-
-
-### Submission Instructions
-
-* You will receive a Git repository link for the base project.
-* **Fork the repository**, complete your work in a new branch, and **submit a pull request** to share your solution.
-* Include a `README.md` with:
-
-  * Clear instructions to run the project locally
-  * A short explanation of your architecture or design decisions
-  * A seed script to preload providers and statuses
-
-
-
-### Time Expectation
-
-You should spend no more than **8 hours** on this task.
-
-Don’t worry if you can’t finish everything. What matters most is **how far you get** and **how you approach the problem**.
+- `red-valley-tecnical-challenge-backend/`: API y lógica de negocio.
+- `red-valley-tecnical-challenge-frontend/`: Interfaz de usuario.
