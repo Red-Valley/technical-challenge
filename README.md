@@ -201,32 +201,6 @@ src/
 - `PATCH /statuses/:id` - Update status
 - `DELETE /statuses/:id` - Delete status
 
-## 🧪 Available Scripts
-
-```bash
-# Development
-npm run dev          # Start backend and frontend
-npm run dev:backend  # Backend only
-npm run dev:frontend # Frontend only
-
-# Build
-npm run build        # Production build
-npm run build:backend
-npm run build:frontend
-
-# Database
-npm run seed         # Run seeds
-npm run db:test      # Test connection
-```
-
-## 🤝 Contributing
-
-1. Fork the project
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 🔧 Troubleshooting
 
 ### Database Connection Issues
