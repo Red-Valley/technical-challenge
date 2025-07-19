@@ -18,17 +18,6 @@ statusController.get(STATUS_ROUTES.greet, (req, res) => {
 // *Creates a status
 statusController.post(STATUS_ROUTES.create, async (req, res) => {
     try {
-        // Logic
-    } catch (error) {
-        throw new Error(
-            `${LANG.ENGLISH.errors.apiError}: ${req.originalUrl}, ${LANG.ENGLISH.errors.description}: ${error}`
-        );
-    }
-});
-
-// *Creates a status
-statusController.post(STATUS_ROUTES.create, async (req, res) => {
-    try {
         const result = await statusDBctions.create(req.body);
 
         res.status(201).json(result);
