@@ -11,6 +11,7 @@ const runDbMigrations = async () => {
         await client.query('BEGIN'); // begin transaction
 
         await client.query(createTables);
+
         /**
          * !IMPORTANT if you want to modify code and reload automatically comment the lines (17, 18) below.
          */
