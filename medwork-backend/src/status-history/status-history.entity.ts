@@ -23,7 +23,7 @@ export class StatusHistory {
   changedAt: Date;
 
   // Relaciones
-  @ManyToOne(() => Patient, patient => patient.statusHistory)
+  @ManyToOne(() => Patient, (patient) => patient.statusHistory)
   @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 
