@@ -5,16 +5,17 @@ import statusController from './controllers/status-controller';
 import statusHistoryController from './controllers/status-history-controller';
 import providerController from './controllers/provider-controller';
 import API_ROTES from './routes/api-routes';
+import * as dotenv from 'dotenv';
+
+/**
+ * Env variables
+ */
+dotenv.config(); // Loads variables from .env
 
 /**
  * Server
  */
 const app = express();
-
-/**
- * Settings
- */
-const port = process.env.PORT || 3000;
 
 /**
  * Middlewares
@@ -31,8 +32,6 @@ app.use(API_ROTES.statusHistory, statusHistoryController);
 app.use(API_ROTES.provider, providerController);
 
 /**
- * Execution
+ * Export app
  */
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+export default app;

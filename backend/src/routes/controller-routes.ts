@@ -1,6 +1,10 @@
 export const PATIENT_ROUTES = {
     greet: '/greet',
-    create: '/create'
+    create: '/create',
+    getAll: '/',
+    getWithId: '/:id',
+    putWithId: '/:id',
+    deleteWithId: '/:id'
 };
 
 export const STATUS_ROUTES = {

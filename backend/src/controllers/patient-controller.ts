@@ -24,4 +24,24 @@ patientController.post(PATIENT_ROUTES.create, async (req, res) => {
     }
 });
 
+// *Get all
+patientController.get(PATIENT_ROUTES.getAll, (req, res) => {
+    res.json('Hello world from patient controller');
+});
+
+// *Get with ID
+patientController.get(PATIENT_ROUTES.getWithId, (req, res) => {
+    res.json('Hello world from patient controller');
+});
+
+// *Put with ID
+patientController.put(PATIENT_ROUTES.putWithId, (req, res) => {
+    res.json('Hello world from patient controller');
+});
+
+// *Delete with ID
+patientController.put(PATIENT_ROUTES.deleteWithId, (req, res) => {
+    res.json('Hello world from patient controller');
+});
+
 export default patientController;

@@ -141,3 +141,11 @@ Don’t worry if you can’t finish everything. What matters most is **how far y
 ### Run the server
 
 Use npm run dev for development with ts-node or npm run build followed by npm start for production environments after compilation.
+
+### DB Credentials
+Host	localhost
+Port	5432
+User	Home
+Database	postgres
+Password	none
+Connection URL	postgresql://localhost
