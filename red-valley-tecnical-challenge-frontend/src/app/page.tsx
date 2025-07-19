@@ -1,103 +1,129 @@
-import Image from "next/image";
+'use client'
+
+import { Activity, Users, UserPlus, Stethoscope, UserCheck } from "lucide-react"
+import Link from "next/link"
+import { Button } from "./components/ui/atoms/Button"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent
+} from "./components/ui/atoms/Card"
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="container mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="flex flex-col items-center justify-center gap-3 mb-4 md:flex-row md:gap-4">
+          <Activity className="h-12 w-12 text-primary" />
+          <h1 className="text-3xl font-bold sm:text-4xl">Patient Management System</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Manage patients, providers, and track clinical status changes with comprehensive history tracking.
+        </p>
+      </div>
+
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+        <Card className="hover:shadow-lg transition-shadow flex flex-col">
+          <CardHeader className="text-center">
+            <Users className="h-12 w-12 mx-auto text-primary mb-2" />
+            <CardTitle>View Patients</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p className="text-muted-foreground">
+              View and manage all patients, update their status, and track their progress.
+            </p>
+          </CardContent>
+          <div className="p-4">
+            <Link href="/patients" passHref>
+              <Button buttonClass="w-full cursor-pointer hover:bg-blue-600 rounded transition-colors">View Patients</Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow flex flex-col">
+          <CardHeader className="text-center">
+            <UserPlus className="h-12 w-12 mx-auto text-primary mb-2" />
+            <CardTitle>Add Patient</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p className="text-muted-foreground mb-6">
+              Register a new patient and assign them to a provider.
+            </p>
+          </CardContent>
+          <div className="p-4">
+            <Link href="/create-patient" passHref>
+              <Button buttonClass="w-full cursor-pointer hover:bg-blue-600 rounded transition-colors">Add Patient</Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow flex flex-col">
+          <CardHeader className="text-center">
+            <Stethoscope className="h-12 w-12 mx-auto text-primary mb-2" />
+            <CardTitle>View Providers</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p className="text-muted-foreground mb-6">
+              View all healthcare providers and their specialties.
+            </p>
+          </CardContent>
+          <div className="p-4">
+            <Link href="/providers" passHref>
+              <Button buttonClass="w-full cursor-pointer hover:bg-blue-600 rounded transition-colors">View Providers</Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow flex flex-col">
+          <CardHeader className="text-center">
+            <UserCheck className="h-12 w-12 mx-auto text-primary mb-2" />
+            <CardTitle>Add Provider</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p className="text-muted-foreground mb-12">
+              Register a new healthcare provider to the system.
+            </p>
+          </CardContent>
+          <div className="p-4">
+            <Link href="/create-provider" passHref>
+              <Button buttonClass="w-full cursor-pointer bg-primary hover:bg-blue-600 rounded transition-colors">Add Provider</Button>
+            </Link>
+          </div>
+        </Card>
+
+      </div>
+
+      {/* Features section */}
+      <div className="mt-12 text-center">
+        <Card className="max-w-2xl mx-auto">
+          <CardHeader>
+            <CardTitle>Features</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+              <div>
+                <h4 className="font-semibold mb-2">Patient Management</h4>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Create and manage patient records</li>
+                  <li>• Assign providers to patients</li>
+                  <li>• Update patient status in real-time</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Status Tracking</h4>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Hierarchical status system</li>
+                  <li>• Complete status change history</li>
+                  <li>• Automated status logging</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }
