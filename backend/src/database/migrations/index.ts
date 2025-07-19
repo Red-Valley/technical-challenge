@@ -1,5 +1,5 @@
 import db from '..';
-import createTables from './1_create-patient-table';
+import createTables from './1_create-initial-tables';
 
 const runDbMigrations = async () => {
     console.log('BEGIN DB MIGRATION');
