@@ -1,8 +1,9 @@
-import { Axios } from "axios";
+import axios from "axios";
 
-export const apiClient = new Axios({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+export const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000,
 });

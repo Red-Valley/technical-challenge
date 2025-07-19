@@ -1,0 +1,1 @@
+export const PROVIDERS_QUERY_KEY = 'providers';

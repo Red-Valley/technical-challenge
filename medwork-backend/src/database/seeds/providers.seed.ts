@@ -14,11 +14,11 @@ export async function seedProviders(dataSource: DataSource) {
   console.log('Seeding providers...');
 
   const providers = [
-    { fullName: 'Dr. María González', specialty: 'Cardiología' },
-    { fullName: 'Dr. Juan Pérez', specialty: 'Medicina General' },
-    { fullName: 'Dra. Ana Rodríguez', specialty: 'Pediatría' },
-    { fullName: 'Dr. Carlos López', specialty: 'Dermatología' },
-    { fullName: 'Dra. Laura Martínez', specialty: 'Ginecología' },
+    { fullName: 'Dr. María González', specialty: 'Cardiology' },
+    { fullName: 'Dr. Juan Pérez', specialty: 'General Medicine' },
+    { fullName: 'Dra. Ana Rodríguez', specialty: 'Pediatrics' },
+    { fullName: 'Dr. Carlos López', specialty: 'Dermatology' },
+    { fullName: 'Dra. Laura Martínez', specialty: 'Gynecology' },
   ];
 
   for (const providerData of providers) {
