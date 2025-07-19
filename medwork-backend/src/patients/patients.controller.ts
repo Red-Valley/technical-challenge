@@ -43,15 +43,6 @@ export class PatientsController {
     description: 'Datos inválidos',
   })
   async create(@Body(ValidationPipe) createPatientDto: CreatePatientDto) {
-    // Check if patient with same name already exists
-    const existingPatient = await this.patientsService.findByFullName(
-      createPatientDto.fullName,
-    );
-    if (existingPatient) {
-      throw new BadRequestException(
-        `A patient with the name "${createPatientDto.fullName}" already exists`,
-      );
-    }
     return await this.patientsService.create(createPatientDto);
   }
 

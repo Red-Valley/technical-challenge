@@ -1,14 +1,13 @@
 "use client";
 import { apiClient } from "@/clients/main";
-import {
-  UserIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { UserIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CreatePatientModal from "@/components/CreatePatientModal";
 import ChangePatientStatusModal from "@/components/ChangePatientStatusModal";
 import ShowPatientStatusHistoryModal from "@/components/ShowPatientStatusHistoryModal";
+import DeletePatientModal from "@/components/DeletePatientModal";
+import EditPatientModal from "@/components/EditPatientModal";
 import { AxiosResponse } from "axios";
 import { Patient } from "../../constants/models";
 import { PATIENTS_QUERY_KEY } from "../../constants/queryKeys";
@@ -95,8 +94,23 @@ export default function PatientsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{patient.email}</div>
-                    <div className="text-sm text-gray-500">{patient.phone}</div>
+                    <div className="flex items-center">
+                      <div className="mr-4">
+                        <div className="text-sm text-gray-900">
+                          {patient.email}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {patient.phone}
+                        </div>
+                      </div>
+                      <EditPatientModal
+                        patientId={patient.id}
+                        patientName={patient.fullName}
+                        currentEmail={patient.email}
+                        currentPhone={patient.phone}
+                        currentProviderId={patient.providerId}
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
@@ -111,7 +125,7 @@ export default function PatientsPage() {
                       <ChangePatientStatusModal
                         patientId={patient.id}
                         currentStatusId={patient.statusId}
-                        currentStatusName={patient.status?.name||"Unknown"}
+                        currentStatusName={patient.status?.name || "Unknown"}
                         patientName={patient.fullName}
                       />
                       <ShowPatientStatusHistoryModal
@@ -121,12 +135,10 @@ export default function PatientsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      Edit
-                    </button>
-                    <button className="text-red-600 hover:text-red-900">
-                      Delete
-                    </button>
+                    <DeletePatientModal
+                      patientId={patient.id}
+                      patientName={patient.fullName}
+                    />
                   </td>
                 </tr>
               ))}

@@ -46,7 +46,7 @@ export default function CreatePatientModal({
       .matches(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
       .max(20, "Phone number must be less than 20 characters"),
     providerId: Yup.string()
-      .required("Provider is required")
+      //.required("Provider is required")
       .uuid("Please select a valid provider"),
   });
 

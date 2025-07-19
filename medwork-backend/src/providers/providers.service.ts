@@ -48,6 +48,13 @@ export class ProvidersService {
 
   async remove(id: string): Promise<void> {
     const provider = await this.findOne(id);
+
+    if (provider.patients && provider.patients.length > 0) {
+      throw new NotFoundException(
+        'Cannot delete provider with associated patients',
+      );
+    }
+
     await this.providerRepository.remove(provider);
   }
 }

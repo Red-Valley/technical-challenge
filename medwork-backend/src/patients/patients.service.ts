@@ -81,6 +81,9 @@ export class PatientsService {
 
   async remove(id: string): Promise<void> {
     const patient = await this.findOne(id);
+
+    await this.statusHistoryRepository.delete({ patientId: id });
+
     await this.patientRepository.remove(patient);
   }
 
