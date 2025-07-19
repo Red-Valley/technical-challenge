@@ -1,5 +1,6 @@
 import db from '..';
 import createTables from './1_create-initial-tables';
+import createStatuses from './2_create-statuses';
 
 const runDbMigrations = async () => {
     console.log('BEGIN DB MIGRATION');
@@ -9,6 +10,7 @@ const runDbMigrations = async () => {
         await client.query('BEGIN'); // begin transaction
 
         await client.query(createTables);
+        await client.query(createStatuses);
 
         await client.query('COMMIT'); // commit transaction
 
