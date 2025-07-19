@@ -9,7 +9,11 @@ export const PATIENT_ROUTES = {
 
 export const STATUS_ROUTES = {
     greet: '/greet',
-    create: '/create'
+    create: '/create',
+    findAll: '/findAll',
+    findOneById: '/findOneById/:id',
+    updateOneById: '/updateOneById',
+    deleteOneById: '/deleteOneById/:id'
 };
 
 export const STATUS_HISTORY_ROUTES = {
