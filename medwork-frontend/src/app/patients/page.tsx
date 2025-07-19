@@ -1,6 +1,11 @@
 "use client";
 import { apiClient } from "@/clients/main";
-import { UserIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  PlusIcon,
+  FunnelIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CreatePatientModal from "@/components/CreatePatientModal";
@@ -9,24 +14,84 @@ import ShowPatientStatusHistoryModal from "@/components/ShowPatientStatusHistory
 import DeletePatientModal from "@/components/DeletePatientModal";
 import EditPatientModal from "@/components/EditPatientModal";
 import { AxiosResponse } from "axios";
-import { Patient } from "../../constants/models";
-import { PATIENTS_QUERY_KEY } from "../../constants/queryKeys";
+import { Patient, Provider, Status } from "../../constants/models";
+import {
+  PATIENTS_QUERY_KEY,
+  PROVIDERS_QUERY_KEY,
+} from "../../constants/queryKeys";
 import AssignProviderModal from "@/components/AssignProviderModal";
 
 export default function PatientsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<
+    "provider" | "status" | null
+  >(null);
+  const [selectedProviderId, setSelectedProviderId] = useState<string>("");
+  const [selectedStatusId, setSelectedStatusId] = useState<string>("");
+
+  // Fetch providers and statuses for filters
+  const { data: providersResponse } = useQuery<AxiosResponse<Provider[]>>({
+    queryKey: [PROVIDERS_QUERY_KEY],
+    queryFn: () => apiClient.get("/providers"),
+  });
+
+  const { data: statusesResponse } = useQuery<AxiosResponse<Status[]>>({
+    queryKey: ["statuses"],
+    queryFn: () => apiClient.get("/statuses"),
+  });
+
+  const providers = providersResponse?.data || [];
+  const statuses = statusesResponse?.data || [];
+
+  // Build query parameters
+  const queryParams = new URLSearchParams();
+  if (activeFilter === "provider" && selectedProviderId) {
+    queryParams.append("providerId", selectedProviderId);
+  } else if (activeFilter === "status" && selectedStatusId) {
+    queryParams.append("statusId", selectedStatusId);
+  }
+
+  const queryUrl = queryParams.toString()
+    ? `/patients?${queryParams.toString()}`
+    : "/patients";
 
   const {
     data: patients,
     error,
     isLoading,
   } = useQuery<AxiosResponse<Patient[]>>({
-    queryKey: [PATIENTS_QUERY_KEY],
-    queryFn: () => apiClient.get("/patients"),
+    queryKey: [
+      PATIENTS_QUERY_KEY,
+      activeFilter,
+      selectedProviderId,
+      selectedStatusId,
+    ],
+    queryFn: () => apiClient.get(queryUrl),
   });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+
+  const clearFilters = () => {
+    setActiveFilter(null);
+    setSelectedProviderId("");
+    setSelectedStatusId("");
+  };
+
+  const getFilterLabel = () => {
+    if (activeFilter === "provider" && selectedProviderId) {
+      const provider = providers.find((p) => p.id === selectedProviderId);
+      return `Provider: ${provider?.fullName || "Unknown"}`;
+    }
+    if (activeFilter === "status" && selectedStatusId) {
+      const status = statuses.find((s) => s.id === selectedStatusId);
+      return `Status: ${status?.name || "Unknown"}`;
+    }
+    return null;
+  };
+
+  const filterLabel = getFilterLabel();
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -46,12 +111,107 @@ export default function PatientsPage() {
         </button>
       </div>
 
+      {/* Filters */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <FunnelIcon className="h-5 w-5 mr-2" />
+            Filters
+          </h3>
+          {filterLabel && (
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600">Active filter:</span>
+              <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                {filterLabel}
+              </span>
+              <button
+                onClick={clearFilters}
+                className="text-gray-400 hover:text-gray-600"
+                title="Clear filters"
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Provider Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Provider
+            </label>
+            <select
+              value={activeFilter === "provider" ? selectedProviderId : ""}
+              onChange={(e) => {
+                if (e.target.value) {
+                  setActiveFilter("provider");
+                  setSelectedProviderId(e.target.value);
+                  setSelectedStatusId("");
+                } else {
+                  setActiveFilter(null);
+                  setSelectedProviderId("");
+                }
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All providers</option>
+              {providers.map((provider) => (
+                <option key={provider.id} value={provider.id}>
+                  {provider.fullName} - {provider.specialty}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Status
+            </label>
+            <select
+              value={activeFilter === "status" ? selectedStatusId : ""}
+              onChange={(e) => {
+                if (e.target.value) {
+                  setActiveFilter("status");
+                  setSelectedStatusId(e.target.value);
+                  setSelectedProviderId("");
+                } else {
+                  setActiveFilter(null);
+                  setSelectedStatusId("");
+                }
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All statuses</option>
+              {statuses.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Patients List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">
-            Medical Patients
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-medium text-gray-900">
+              Medical Patients
+            </h2>
+            {filterLabel && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">
+                  Showing {patients?.data?.length || 0} patients
+                </span>
+                <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                  {filterLabel}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -114,22 +274,24 @@ export default function PatientsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        patient.provider?.fullName
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {patient.provider?.fullName || "Unassigned"}
-                    </span>
-                    {!patient.provider?.fullName && (
-                      <AssignProviderModal
-                        patientId={patient.id}
-                        patientName={patient.fullName}
-                        currentProviderId={patient.providerId}
-                      />
-                    )}
+                    <div className="flex items-center">
+                      <span
+                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          patient.provider?.fullName
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {patient.provider?.fullName || "Unassigned"}
+                      </span>
+                      {!patient.providerId && (
+                        <AssignProviderModal
+                          patientId={patient.id}
+                          patientName={patient.fullName}
+                          currentProviderId={patient.providerId}
+                        />
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
