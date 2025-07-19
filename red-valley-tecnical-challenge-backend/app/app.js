@@ -8,10 +8,12 @@ app.use(cors())
 const postRoutes = require('../Routes/Post-routes/post');
 const getRoutes = require('../Routes/Get-routes/get');
 const putRoutes = require('../Routes/Put-routes/Put');
+const deleteRoutes = require('../Routes/Delete-routes/Delete')
 
 app.use('/api', postRoutes);
 app.use('/api', putRoutes);
 app.use('/api', getRoutes);
+app.use('/api', deleteRoutes);
 
 
 module.exports = app;
