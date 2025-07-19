@@ -1,26 +1,26 @@
 "use client";
 import { apiClient } from "@/clients/main";
 import {
-  UserGroupIcon,
+  UserIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import CreateProviderModal from "@/components/CreateProviderModal";
+import CreatePatientModal from "@/components/CreatePatientModal";
 import { AxiosResponse } from "axios";
-import { Provider } from "../../constants/models";
-import { PROVIDERS_QUERY_KEY } from "../../constants/queryKeys";
+import { Patient } from "../../constants/models";
+import { PATIENTS_QUERY_KEY } from "../../constants/queryKeys";
 
-export default function ProvidersPage() {
+export default function PatientsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   
   const {
-    data: providers,
+    data: patients,
     error,
     isLoading,
-  } = useQuery<AxiosResponse<Provider[]>>({
-    queryKey: [PROVIDERS_QUERY_KEY],
-    queryFn: () => apiClient.get("/providers"),
+  } = useQuery<AxiosResponse<Patient[]>>({
+    queryKey: [PATIENTS_QUERY_KEY],
+    queryFn: () => apiClient.get("/patients"),
   });
   
   if (isLoading) return <div>Loading...</div>;
@@ -30,9 +30,9 @@ export default function ProvidersPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Providers</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Patients</h1>
           <p className="text-gray-600">
-            Manage medical providers and their specialties
+            Manage patients and their clinical information
           </p>
         </div>
         <button 
@@ -40,15 +40,15 @@ export default function ProvidersPage() {
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
           <PlusIcon className="h-4 w-4 mr-2" />
-          Add Provider
+          Add Patient
         </button>
       </div>
 
-      {/* Providers List */}
+      {/* Patients List */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">
-            Medical Providers
+            Medical Patients
           </h2>
         </div>
         <div className="overflow-x-auto">
@@ -56,10 +56,16 @@ export default function ProvidersPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Patient
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Contact
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Provider
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Specialty
+                  Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -67,28 +73,37 @@ export default function ProvidersPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {providers?.data?.map((provider) => (
-                <tr key={provider.id} className="hover:bg-gray-50">
+              {patients?.data?.map((patient) => (
+                <tr key={patient.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                          <UserGroupIcon className="h-5 w-5 text-blue-600" />
+                          <UserIcon className="h-5 w-5 text-blue-600" />
                         </div>
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
-                          {provider.fullName}
+                          {patient.fullName}
                         </div>
                         <div className="text-sm text-gray-500">
-                          ID: {provider.id.slice(0, 8)}...
+                          ID: {patient.id.slice(0, 8)}...
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{patient.email}</div>
+                    <div className="text-sm text-gray-500">{patient.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      {provider.specialty}
+                      {patient.provider?.fullName || 'Unassigned'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                      {patient.status?.name || 'Unknown'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -106,8 +121,8 @@ export default function ProvidersPage() {
         </div>
       </div>
       
-      {/* Create Provider Modal */}
-      <CreateProviderModal
+      {/* Create Patient Modal */}
+      <CreatePatientModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
       />

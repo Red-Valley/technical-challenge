@@ -5,8 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { apiClient } from "@/clients/main";
 import Modal from "./Modal";
-import { CreateProviderDto } from "@/app/constants/DTO";
-import { PROVIDERS_QUERY_KEY } from "@/app/constants/queryKeys";
+import { CreateProviderDto } from "@/constants/DTO";
+import { PROVIDERS_QUERY_KEY } from "@/constants/queryKeys";
 
 interface CreateProviderModalProps {
   isOpen: boolean;
