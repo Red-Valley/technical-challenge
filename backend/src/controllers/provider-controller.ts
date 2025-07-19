@@ -10,7 +10,7 @@ const providerController = express.Router();
 
 // *Greet
 providerController.get(PROVIDER_ROUTES.greet, (req, res) => {
-    res.json('Hello world from Block controller');
+    res.json('Hello world from provider controller');
 });
 
 // *Creates a provider

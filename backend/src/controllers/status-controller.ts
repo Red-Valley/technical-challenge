@@ -10,7 +10,7 @@ const statusController = express.Router();
 
 // *Greet
 statusController.get(STATUS_ROUTES.greet, (req, res) => {
-    res.json('Hello world from Block controller');
+    res.json('Hello world from status controller');
 });
 
 // *Creates a status

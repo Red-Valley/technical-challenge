@@ -10,7 +10,7 @@ const patientController = express.Router();
 
 // *Greet
 patientController.get(PATIENT_ROUTES.greet, (req, res) => {
-    res.json('Hello world from Block controller');
+    res.json('Hello world from patient controller');
 });
 
 // *Creates a patient

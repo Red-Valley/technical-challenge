@@ -10,7 +10,7 @@ const statusHistoryController = express.Router();
 
 // *Greet
 statusHistoryController.get(STATUS_HISTORY_ROUTES.greet, (req, res) => {
-    res.json('Hello world from Block controller');
+    res.json('Hello world from status history controller');
 });
 
 // *Creates a status history
