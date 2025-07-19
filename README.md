@@ -136,3 +136,8 @@ You should include the following screens:
 You should spend no more than **8 hours** on this task.
 
 Don’t worry if you can’t finish everything. What matters most is **how far you get** and **how you approach the problem**.
+
+
+### Run the server
+
+Use npm run dev for development with ts-node or npm run build followed by npm start for production environments after compilation.
