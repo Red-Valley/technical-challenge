@@ -5,6 +5,7 @@ import statusController from './controllers/status-controller';
 import statusHistoryController from './controllers/status-history-controller';
 import providerController from './controllers/provider-controller';
 import API_ROTES from './routes/api-routes';
+import cors from 'cors';
 
 /**
  * Server
@@ -16,6 +17,7 @@ const app = express();
  */
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 /**
  * Controllers
