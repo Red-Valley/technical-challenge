@@ -24,8 +24,8 @@ export class Patient {
   @Column()
   phone: string;
 
-  @Column({ name: 'provider_id' })
-  providerId: string;
+  @Column({ name: 'provider_id', nullable: true })
+  providerId: string | null;
 
   @Column({ name: 'status_id' })
   statusId: string;

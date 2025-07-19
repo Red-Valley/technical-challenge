@@ -36,6 +36,7 @@ export class PatientsService {
     const patient = this.patientRepository.create({
       ...createPatientDto,
       statusId: scheduledStatus.id,
+      providerId: createPatientDto.providerId || null,
     });
 
     const savedPatient = await this.patientRepository.save(patient);
@@ -76,7 +77,10 @@ export class PatientsService {
     const patient = await this.findOne(id);
 
     Object.assign(patient, updatePatientDto);
-    return await this.patientRepository.save(patient);
+    await this.patientRepository.save(patient);
+
+    // Return the updated patient with fresh relations
+    return await this.findOne(id);
   }
 
   async remove(id: string): Promise<void> {
@@ -149,7 +153,7 @@ export class PatientsService {
   async findByProvider(providerId: string): Promise<Patient[]> {
     return await this.patientRepository.find({
       where: { providerId },
-      relations: ['status'],
+      relations: ['provider', 'status'],
       order: { createdAt: 'DESC' },
     });
   }

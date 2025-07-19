@@ -11,6 +11,7 @@ import EditPatientModal from "@/components/EditPatientModal";
 import { AxiosResponse } from "axios";
 import { Patient } from "../../constants/models";
 import { PATIENTS_QUERY_KEY } from "../../constants/queryKeys";
+import AssignProviderModal from "@/components/AssignProviderModal";
 
 export default function PatientsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -113,9 +114,22 @@ export default function PatientsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        patient.provider?.fullName
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
                       {patient.provider?.fullName || "Unassigned"}
                     </span>
+                    {!patient.provider?.fullName && (
+                      <AssignProviderModal
+                        patientId={patient.id}
+                        patientName={patient.fullName}
+                        currentProviderId={patient.providerId}
+                      />
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">

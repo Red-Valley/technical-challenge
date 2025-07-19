@@ -3,8 +3,8 @@ export interface CreatePatientDto {
   fullName: string;
   email: string;
   phone: string;
-  providerId: string;
-  statusId?: string; // Optional, can be set to default status
+  providerId?: string; 
+  statusId?: string;
 }
 
 export interface UpdatePatientDto {

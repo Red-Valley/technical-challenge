@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsUUID,
   MaxLength,
+  IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -39,10 +40,11 @@ export class CreatePatientDto {
   phone: string;
 
   @ApiProperty({
-    description: 'ID del proveedor médico asignado',
+    description: 'ID del proveedor médico asignado (opcional)',
     example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID()
-  providerId: string;
+  providerId?: string;
 }

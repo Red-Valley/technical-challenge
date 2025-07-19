@@ -4,20 +4,17 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { PencilIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { apiClient } from "@/clients/main";
 import Modal from "./Modal";
-import { UpdatePatientDto } from "@/constants/DTO";
-import { PATIENTS_QUERY_KEY, PROVIDERS_QUERY_KEY } from "@/constants/queryKeys";
 import { Provider } from "@/constants/models";
+import { PATIENTS_QUERY_KEY, PROVIDERS_QUERY_KEY } from "@/constants/queryKeys";
 import { AxiosError } from "axios";
 import { ApiResponse } from "@/constants/responses";
 
-interface EditPatientModalProps {
+interface AssignProviderModalProps {
   patientId: string;
   patientName: string;
-  currentEmail: string;
-  currentPhone: string;
   currentProviderId: string | null;
 }
 
@@ -25,13 +22,11 @@ interface ProvidersResponse {
   data: Provider[];
 }
 
-export default function EditPatientModal({
+export default function AssignProviderModal({
   patientId,
   patientName,
-  currentEmail,
-  currentPhone,
   currentProviderId,
-}: EditPatientModalProps) {
+}: AssignProviderModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -46,14 +41,6 @@ export default function EditPatientModal({
 
   // Validation schema
   const validationSchema = Yup.object({
-    email: Yup.string()
-      .required("Email is required")
-      .email("Please enter a valid email address")
-      .max(100, "Email must be less than 100 characters"),
-    phone: Yup.string()
-      .required("Phone number is required")
-      .matches(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
-      .max(20, "Phone number must be less than 20 characters"),
     providerId: Yup.string()
       .nullable()
       .optional()
@@ -61,66 +48,68 @@ export default function EditPatientModal({
   });
 
   // Initial values
-  const initialValues: UpdatePatientDto = {
-    email: currentEmail,
-    phone: currentPhone,
-    providerId: currentProviderId || undefined,
+  const initialValues = {
+    providerId: currentProviderId || "",
   };
 
-  const updatePatientMutation = useMutation({
-    mutationFn: (data: UpdatePatientDto) =>
-      apiClient.patch(`/patients/${patientId}`, data),
+  const assignProviderMutation = useMutation({
+    mutationFn: (data: { providerId: string | null }) =>
+      apiClient.patch(`/patients/${patientId}`, {
+        providerId: data.providerId || null,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PATIENTS_QUERY_KEY] });
       setIsOpen(false);
     },
     onError: (error: unknown) => {
-      console.error("Error updating patient:", error);
+      console.error("Error assigning provider:", error);
       alert(
         (error as AxiosError<ApiResponse<null>>)?.response?.data?.message ||
-          "Failed to update patient"
+          "Failed to assign provider"
       );
     },
   });
 
   const handleSubmit = (
-    values: UpdatePatientDto,
+    values: { providerId: string },
     {
       setSubmitting,
       resetForm,
     }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }
   ) => {
-    updatePatientMutation.mutate(values, {
-      onSuccess: () => {
-        resetForm();
-        setSubmitting(false);
-      },
-      onError: () => {
-        setSubmitting(false);
-      },
-    });
+    assignProviderMutation.mutate(
+      { providerId: values.providerId || null },
+      {
+        onSuccess: () => {
+          resetForm();
+          setSubmitting(false);
+        },
+        onError: () => {
+          setSubmitting(false);
+        },
+      }
+    );
   };
 
   return (
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="text-blue-600 hover:text-blue-900 mr-3"
-        title="Edit Patient"
+        className="text-blue-600 hover:text-blue-900 ml-2"
+        title="Assign/Unassign Provider"
       >
-        <PencilSquareIcon className="h-4 w-4" />
+        <UserPlusIcon className="h-4 w-4" />
       </button>
 
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        title="Edit Patient Information"
+        title="Assign or Unassign Provider"
         size="md"
       >
         <div className="mb-4">
           <p className="text-sm text-gray-600">
-            Editing information for:{" "}
-            <span className="font-medium text-gray-900">{patientName}</span>
+            Assign a provider for: <span className="font-medium text-gray-900">{patientName}</span>
           </p>
         </div>
 
@@ -131,65 +120,13 @@ export default function EditPatientModal({
         >
           {({ isSubmitting, errors, touched }) => (
             <Form className="space-y-6">
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Email *
-                </label>
-                <Field
-                  type="email"
-                  id="email"
-                  name="email"
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.email && touched.email
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="john.doe@email.com"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="p"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Phone Number *
-                </label>
-                <Field
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.phone && touched.phone
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="+1234567890"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="p"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              {/* Provider */}
+              {/* Provider Dropdown */}
               <div>
                 <label
                   htmlFor="providerId"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Assigned Provider (Optional)
+                  Provider
                 </label>
                 <Field
                   as="select"
@@ -226,12 +163,12 @@ export default function EditPatientModal({
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting || updatePatientMutation.isPending}
+                  disabled={isSubmitting || assignProviderMutation.isPending}
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting || updatePatientMutation.isPending
-                    ? "Updating..."
-                    : "Update Patient"}
+                  {isSubmitting || assignProviderMutation.isPending
+                    ? "Saving..."
+                    : "Save"}
                 </button>
               </div>
             </Form>
@@ -240,4 +177,4 @@ export default function EditPatientModal({
       </Modal>
     </>
   );
-}
+} 

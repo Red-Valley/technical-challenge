@@ -5,7 +5,7 @@ export interface Patient {
     fullName: string;
     email: string;
     phone: string;
-    providerId: string; // UUID (FK to providers)
+    providerId: string | null; // UUID (FK to providers) - nullable
     statusId: string; // UUID (FK to statuses)
     createdAt: Date;
     // Optional relations for API responses

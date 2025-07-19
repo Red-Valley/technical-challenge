@@ -46,7 +46,8 @@ export default function CreatePatientModal({
       .matches(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
       .max(20, "Phone number must be less than 20 characters"),
     providerId: Yup.string()
-      //.required("Provider is required")
+      .nullable()
+      .optional()
       .uuid("Please select a valid provider"),
   });
 
@@ -55,7 +56,7 @@ export default function CreatePatientModal({
     fullName: "",
     email: "",
     phone: "",
-    providerId: "",
+    providerId: undefined,
   };
 
   const createPatientMutation = useMutation({
@@ -189,7 +190,7 @@ export default function CreatePatientModal({
                 htmlFor="providerId"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Assigned Provider *
+                Assigned Provider (Optional)
               </label>
               <Field
                 as="select"
@@ -202,7 +203,7 @@ export default function CreatePatientModal({
                 }`}
                 placeholder="Select a provider"
               >
-                <option value="">Select a provider</option>
+                <option value="">No provider assigned</option>
                 {providers.map((provider: Provider) => (
                   <option key={provider.id} value={provider.id}>
                     {provider.fullName} - {provider.specialty}
