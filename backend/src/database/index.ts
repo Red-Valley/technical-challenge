@@ -1,10 +1,14 @@
 import { Pool } from 'pg';
 
+/**
+ * TODO: Implement .env
+ */
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '5432'),
-    database: process.env.DB_NAME
+    user: 'postgres',
+    password: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres'
 });
 
 export default pool;

@@ -26,22 +26,14 @@ const create = async ({
 };
 
 const findOneById = async (id: string) => {
-    console.log('String incoming ID:', id);
-
-    // const query = `
-    //     SELECT * FROM
-    //         "providers"
-    //     WHERE
-    //         id = $1
-    // ;`;
-
     const query = `
         SELECT * FROM
-            "providers"
+            providers
+        WHERE
+            id = $1
     ;`;
 
-    // const result = await db.query(query, [id]);
-    const result = await db.query(query);
+    const result = await db.query(query, [id]);
 
     return result.rows[0];
 };
@@ -49,7 +41,7 @@ const findOneById = async (id: string) => {
 const findAll = async () => {
     const query = `
         SELECT * FROM
-            todos
+            providers
     ;`;
 
     const result = await db.query(query);
@@ -57,38 +49,41 @@ const findAll = async () => {
     return result.rows;
 };
 
-const updateOne = async ({ id, title, status }: { id: number; title: string; status: string }) => {
+const updateOneById = async ({ id, full_name, specialty }: { id: string; full_name: string; specialty: string }) => {
     const query = `
         UPDATE
-            todos
+            providers
         SET
-            title = $2,
-            status = $3
+            full_name = $2,
+            specialty = $3
         WHERE
             id = $1
         RETURNING *
     ;`;
 
-    const result = await db.query(query, [+id, title, status]);
+    const result = await db.query(query, [id, full_name, specialty]);
 
     return result.rows[0];
 };
 
-const deleteOne = async ({ id }: { id: number }) => {
+const deleteOneById = async (id: string) => {
     const query = `
         DELETE FROM
-            todos
+            providers
         WHERE
             id = $1
         RETURNING *
     ;`;
 
-    const result = await db.query(query, [+id]);
+    const result = await db.query(query, [id]);
 
     return result.rows[0];
 };
 
 export default {
     create,
-    findOneById
+    findOneById,
+    findAll,
+    updateOneById,
+    deleteOneById
 };

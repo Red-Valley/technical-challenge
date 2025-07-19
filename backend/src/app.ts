@@ -5,12 +5,6 @@ import statusController from './controllers/status-controller';
 import statusHistoryController from './controllers/status-history-controller';
 import providerController from './controllers/provider-controller';
 import API_ROTES from './routes/api-routes';
-import * as dotenv from 'dotenv';
-
-/**
- * Env variables
- */
-dotenv.config(); // Loads variables from .env
 
 /**
  * Server

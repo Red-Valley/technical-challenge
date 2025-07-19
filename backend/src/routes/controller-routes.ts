@@ -20,5 +20,8 @@ export const STATUS_HISTORY_ROUTES = {
 export const PROVIDER_ROUTES = {
     greet: '/greet',
     create: '/create',
-    findOneById: '/findOneById/:id'
+    findAll: '/findAll',
+    findOneById: '/findOneById/:id',
+    updateOneById: '/updateOneById',
+    deleteOneById: '/deleteOneById/:id'
 };
