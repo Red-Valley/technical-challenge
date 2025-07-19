@@ -27,24 +27,11 @@ fs
     db[model.name] = model;
   });
 
-// Asociaciones
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
-async function testConnection() {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-}
 
-testConnection();
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 module.exports = db;
