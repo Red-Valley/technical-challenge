@@ -98,7 +98,7 @@ You can use a seed script or migrations to insert them.
 
 #### Frontend
 
-* Framework: **React** (Vite or Next.js)
+* Framework: **React** (Vite)
 * Styling: **TailwindCSS**
 * State management: **Redux Toolkit** or **Zustand**
 * Data fetching: **Tanstack Query**
