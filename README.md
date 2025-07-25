@@ -1,3 +1,96 @@
+
+  * Clear instructions to run the project locally
+  * A short explanation of your architecture or design decisions
+  * A seed script to preload providers and statuses
+
+## Running the Project Locally
+
+### Prerequisites
+- Node.js v18 or higher
+- Docker
+- pnpm (recommended) or npm
+
+### Backend Setup
+
+1. **Start PostgreSQL Database**
+   ```bash
+   cd medwork-backend
+   docker-compose up -d
+   ```
+   This will start a PostgreSQL instance with the following configuration:
+   - Database: `medwork`
+   - User: `admin`
+   - Password: `password123`
+   - Port: `5432`
+
+2. **Create Backend Environment File**
+   ```bash
+   cd medwork-backend
+   cp .env.example .env
+   ```
+   
+   Or create a `.env` file with the following content:
+   ```env
+   DATABASE_HOST=localhost
+   DATABASE_PORT=5432
+   DATABASE_USERNAME=admin
+   DATABASE_PASSWORD=password123
+   DATABASE_NAME=medwork
+   PORT=3001
+   NODE_ENV=development
+   ```
+
+3. **Install Dependencies and Start Backend**
+   ```bash
+   cd medwork-backend
+   npm install
+   npm run start:dev
+   ```
+   
+   The backend will be available at `http://localhost:3001`
+
+### Seed the database
+
+1. **Run the command**
+  ```bash
+   cd medwork-backend
+   npm run seed
+
+### Frontend Setup
+
+1. **Create Frontend Environment File**
+  Create a `.env` file with the following content:
+   ```env
+   NEXT_PUBLIC_API=http://localhost:3001
+   ```
+
+2. **Install Dependencies and Start Frontend**
+   ```bash
+   cd medwork-frontend
+   pnpm install
+   pnpm run dev
+   ```
+   
+   The frontend will be available at `http://localhost:3000`
+
+### Verify Installation
+
+1. **Backend Health Check**: Visit `http://localhost:3001/`, you should see a "Hello world"
+2. **Frontend**: Visit `http://localhost:3000` to access the application
+3. **Database**: The PostgreSQL database will be running on `localhost:5432`
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
 ## Technical Challenge
 
 ### Background
