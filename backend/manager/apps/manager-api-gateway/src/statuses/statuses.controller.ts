@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put } from '@nestjs/common';
 import { StatusesService } from './statuses.service';
 import { CreateStatusDto } from '@app/contracts/statuses/DTO/create-status.dto';
 import { UpdateStatusDto } from '@app/contracts/statuses/DTO/update-status.dto';
@@ -8,6 +8,9 @@ import { IdDto } from '@app/contracts/global-dto/id.dto';
 
 @Controller('statuses')
 export class StatusesController {
+
+  private readonly logger = new Logger(StatusesController.name);
+
   constructor(private readonly statusesService: StatusesService) {}
 
   @Post()
@@ -22,6 +25,7 @@ export class StatusesController {
         result
       );
     } catch (error) {
+      this.logger.error('Error al crear el estado: ' + error.message);
       return standardResponse(
         'Falló la creación del estado',
         null,
@@ -41,6 +45,7 @@ export class StatusesController {
         result
       );
     } catch (error) {
+      this.logger.error('Error al obtener los estados: ' + error.message);
       return standardResponse(
         'Falló la obtención de los estados',
         null
@@ -59,6 +64,7 @@ export class StatusesController {
         result
       );
     } catch (error) {
+      this.logger.error('Error al obtener el estado: ' + error.message);
       return standardResponse(
         'Falló la obtención del estado',
         null
@@ -77,6 +83,7 @@ export class StatusesController {
         result
       );
     } catch (error) {
+      this.logger.error('Error al actualizar el estado: ' + error.message);
       return standardResponse(
         'Falló la actualización del estado',
         null
@@ -95,6 +102,7 @@ export class StatusesController {
         result
       );
     } catch (error) {
+      this.logger.error('Error al eliminar el estado: ' + error.message);
       return standardResponse(
         'Falló la eliminación del estado',
         null
