@@ -73,6 +73,15 @@
         "tsConfigPath": "apps/providers/tsconfig.app.json"
       }
     },
+    "standard-response": {
+      "type": "library",
+      "root": "libs/standard-response",
+      "entryFile": "index",
+      "sourceRoot": "libs/standard-response/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/standard-response/tsconfig.lib.json"
+      }
+    },
     "status-history": {
       "type": "application",
       "root": "apps/status-history",

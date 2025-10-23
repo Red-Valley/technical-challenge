@@ -45,6 +45,12 @@
       ],
       "@app/logger/*": [
         "libs/logger/src/*"
+      ],
+      "@app/standard-response": [
+        "libs/standard-response/src"
+      ],
+      "@app/standard-response/*": [
+        "libs/standard-response/src/*"
       ]
     }
   }
