@@ -4,6 +4,7 @@ import { CreateStatusDto } from '@app/contracts/statuses/DTO/create-status.dto';
 import { UpdateStatusDto } from '@app/contracts/statuses/DTO/update-status.dto';
 import { lastValueFrom } from 'rxjs';
 import { standardResponse } from '@app/standard-response';
+import { IdDto } from '@app/contracts/global-dto/id.dto';
 
 @Controller('statuses')
 export class StatusesController {
@@ -48,7 +49,7 @@ export class StatusesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param() { id }: IdDto) {
     try {
       const result = await lastValueFrom(
         this.statusesService.findOne(id)

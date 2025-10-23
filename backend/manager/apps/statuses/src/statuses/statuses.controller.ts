@@ -4,6 +4,7 @@ import { StatusesService } from './statuses.service';
 import { CreateStatusDto } from '@app/contracts/statuses/DTO/create-status.dto';
 import { UpdateStatusWithIdDto } from '@app/contracts/statuses/DTO/update-status.dto';
 import { STATUSES_PATTERNS } from '@app/contracts/statuses/patterns/statuses.patterns';
+import { IdDto } from '@app/contracts/global-dto/id.dto';
 
 @Controller()
 export class StatusesController {
@@ -20,7 +21,7 @@ export class StatusesController {
   }
 
   @MessagePattern(STATUSES_PATTERNS.FIND_ONE)
-  findOne(@Payload() id: string) {
+  findOne(@Payload() { id }: IdDto) {
     return this.statusesService.findOne(id);
   }
 
