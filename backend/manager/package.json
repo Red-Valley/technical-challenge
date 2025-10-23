@@ -15,7 +15,8 @@
     "start:gateway": "nest start manager-api-gateway --watch",
     "start:patients": "nest start patients --watch",
     "start:providers": "nest start providers --watch",
-    "start:all": "concurrently \"npm run start:gateway\" \"npm run start:patients\" \"npm run start:providers\"",
+    "start:statuses": "nest start statuses --watch",
+    "start:all": "concurrently \"npm run start:gateway\" \"npm run start:patients\" \"npm run start:providers\" \"npm run start:statuses\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -92,7 +93,8 @@
       "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",
       "^@app/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1",
       "^@app/custom-class-validator(|/.*)$": "<rootDir>/libs/custom-class-validator/src/$1",
-      "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1"
+      "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1",
+      "^@app/standard-response(|/.*)$": "<rootDir>/libs/standard-response/src/$1"
     }
   }
 }

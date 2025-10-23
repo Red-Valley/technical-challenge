@@ -3,20 +3,18 @@ import { StatusesController } from './statuses.controller';
 import { StatusesService } from './statuses.service';
 
 describe('StatusesController', () => {
-  let statusesController: StatusesController;
+  let controller: StatusesController;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [StatusesController],
       providers: [StatusesService],
     }).compile();
 
-    statusesController = app.get<StatusesController>(StatusesController);
+    controller = module.get<StatusesController>(StatusesController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(statusesController.getHello()).toBe('Hello World!');
-    });
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 });
