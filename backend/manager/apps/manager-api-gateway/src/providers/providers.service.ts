@@ -4,61 +4,45 @@ import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.
 import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { PROVIDERS_PATTERNS } from '@app/contracts/providers/patterns/providers.patterns';
 import { PROVIDERS_SERVICE_NAME } from '@app/contracts/providers/providers.constants';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { standardResponse } from '@app/standard-response';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable()
 export class ProvidersService {
-  constructor(@Inject(PROVIDERS_SERVICE_NAME) private readonly client: ClientProxy) {}
 
-  findAll(): Observable<Provider[]> {
-    return this.client.send<Provider[]>(PROVIDERS_PATTERNS.FIND_ALL, {}).pipe(
-      map((providers) => {
-        if (!providers) {
-          throw new NotFoundException('No se encontraron proveedores');
-        }
-        return providers;
-      }),
-    );
+  private readonly logger = new Logger();
+
+  constructor(
+    @Inject(PROVIDERS_SERVICE_NAME) private readonly client: ClientProxy,
+  ) {}
+
+  findAll() {
+    return this.client.send<Provider[]>(PROVIDERS_PATTERNS.FIND_ALL, {})
   }
 
-  findOne(id: IdDto): Observable<Provider> {
-    return this.client.send<Provider>(PROVIDERS_PATTERNS.FIND_ONE, id).pipe(
-      map((provider) => {
-        if (!provider) {
-          throw new NotFoundException(`Proveedor con id ${id} no encontrado`);
-        }
-        return provider;
-      }),
-    );
+  findOne(id: IdDto) {
+    return this.client.send<Provider>(PROVIDERS_PATTERNS.FIND_ONE, id);
   }
 
-  create(createProviderDto: CreateProviderDto): Observable<Provider> {
-    return this.client.send<Provider>(PROVIDERS_PATTERNS.CREATE, createProviderDto);
-  }
+  create(createProviderDto: CreateProviderDto) {
+  return this.client
+    .send<Provider>(PROVIDERS_PATTERNS.CREATE, createProviderDto);
+}
 
-  update(id: IdDto, updateProviderDto: UpdateProviderDto): Observable<Provider> {
+  update(
+    id: IdDto,
+    updateProviderDto: UpdateProviderDto,
+  ) {
     return this.client
-      .send<Provider>(PROVIDERS_PATTERNS.UPDATE, { ...id, ...updateProviderDto })
-      .pipe(
-        map((updated) => {
-          if (!updated) {
-            throw new NotFoundException(`Proveedor con id ${id} no encontrado`);
-          }
-          return updated;
-        }),
-      );
+      .send<Provider>(PROVIDERS_PATTERNS.UPDATE, {
+        ...id,
+        ...updateProviderDto,
+      });
   }
 
-  remove(id: string): Observable<{ message: string }> {
-    return this.client.send<boolean>(PROVIDERS_PATTERNS.REMOVE, { id }).pipe(
-      map((deleted) => {
-        if (!deleted) {
-          throw new NotFoundException(`Proveedor con id ${id} no encontrado`);
-        }
-        return { message: 'Proveedor eliminado correctamente' };
-      }),
-    );
+  remove(id: string) {
+    return this.client.send<boolean>(PROVIDERS_PATTERNS.REMOVE, { id });
   }
 }
