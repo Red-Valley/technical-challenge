@@ -33,6 +33,9 @@
       ],
       "@app/contracts/*": [
         "libs/contracts/src/*"
+      ],
+      "@app/logger/*": [
+        "libs/logger/src/*"
       ]
     }
   }

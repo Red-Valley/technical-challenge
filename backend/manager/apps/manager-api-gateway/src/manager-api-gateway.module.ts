@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ManagerApiGatewayController } from './manager-api-gateway.controller';
-import { ManagerApiGatewayService } from './manager-api-gateway.service';
 import { PatientsModule } from './patients/patients.module';
+import { LoggerModule } from '@app/logger';
 
 @Module({
-  imports: [PatientsModule],
-  controllers: [ManagerApiGatewayController],
-  providers: [ManagerApiGatewayService],
+  imports: [PatientsModule, LoggerModule],
+  controllers: [],
+  providers: [],
 })
 export class ManagerApiGatewayModule {}
