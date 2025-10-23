@@ -34,6 +34,15 @@
       "@app/contracts/*": [
         "libs/contracts/src/*"
       ],
+      "@app/custom-class-validator": [
+        "libs/custom-class-validator/src"
+      ],
+      "@app/custom-class-validator/*": [
+        "libs/custom-class-validator/src/*"
+      ],
+      "@app/logger/": [
+        "libs/logger/src"
+      ],
       "@app/logger/*": [
         "libs/logger/src/*"
       ]

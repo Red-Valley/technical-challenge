@@ -12,6 +12,10 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/manager/main",
+    "start:gateway": "nest start manager-api-gateway --watch",
+    "start:patients": "nest start patients --watch",
+    "start:providers": "nest start providers --watch",
+    "start:all": "concurrently \"npm run start:gateway\" \"npm run start:patients\" \"npm run start:providers\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,13 +27,19 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/microservices": "^11.1.7",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.0",
     "amqp-connection-manager": "^5.0.0",
     "amqplib": "^0.10.9",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "typeorm": "^0.3.27",
     "yup": "^1.7.1"
   },
   "devDependencies": {
@@ -42,6 +52,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
+    "concurrently": "^9.2.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
@@ -80,6 +91,7 @@
     "moduleNameMapper": {
       "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",
       "^@app/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1",
+      "^@app/custom-class-validator(|/.*)$": "<rootDir>/libs/custom-class-validator/src/$1",
       "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1"
     }
   }
