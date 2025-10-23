@@ -1,3 +1,6 @@
+import { IdDto } from '@app/contracts/global-dto/id.dto';
+import { CreateProviderDto } from '@app/contracts/providers/DTO/create-provider.dto';
+import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.dto';
 import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { PROVIDERS_PATTERNS } from '@app/contracts/providers/patterns/providers.patterns';
 import { PROVIDERS_SERVICE_NAME } from '@app/contracts/providers/providers.constants';
@@ -20,8 +23,8 @@ export class ProvidersService {
     );
   }
 
-  findOne(id: string): Observable<Provider> {
-    return this.client.send<Provider>(PROVIDERS_PATTERNS.FIND_ONE, { id }).pipe(
+  findOne(id: IdDto): Observable<Provider> {
+    return this.client.send<Provider>(PROVIDERS_PATTERNS.FIND_ONE, id).pipe(
       map((provider) => {
         if (!provider) {
           throw new NotFoundException(`Proveedor con id ${id} no encontrado`);
@@ -31,13 +34,13 @@ export class ProvidersService {
     );
   }
 
-  create(createProviderDto: any): Observable<Provider> {
-    return this.client.send<Provider>("providerscreate", createProviderDto);
+  create(createProviderDto: CreateProviderDto): Observable<Provider> {
+    return this.client.send<Provider>(PROVIDERS_PATTERNS.CREATE, createProviderDto);
   }
 
-  update(id: string, updateProviderDto: any): Observable<Provider> {
+  update(id: IdDto, updateProviderDto: UpdateProviderDto): Observable<Provider> {
     return this.client
-      .send<Provider>(PROVIDERS_PATTERNS.UPDATE, { id, ...updateProviderDto })
+      .send<Provider>(PROVIDERS_PATTERNS.UPDATE, { ...id, ...updateProviderDto })
       .pipe(
         map((updated) => {
           if (!updated) {

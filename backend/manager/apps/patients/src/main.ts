@@ -10,7 +10,7 @@ async function bootstrap() {
       urls: [`amqp://${envs.RMQ_USER}:${envs.RMQ_PASSWORD}@${envs.RABBITMQ_URL}`],
       queue: 'patients_queue',
       queueOptions: {
-        durable: false,
+        durable: true,
       }
     },
   });

@@ -8,12 +8,14 @@ config({
 });
 
 const envVarsSchema = object({
-  NODE_ENV: string().oneOf(['dev', 'prod', 'test']).default('dev'),
-  HOST: string().default('0.0.0.0'),
-  PORT: number().default(3000),
-  RMQ_USER: string().default('guest'),
-  RMQ_PASSWORD: string().default('guest'),
-  RABBITMQ_URL: string().default('localhost:5672'),
+  RMQ_USER: string().required(),
+  RMQ_PASSWORD: string().required(),
+  RABBITMQ_URL: string().required(),
+  DB_HOST: string().required(),
+  DB_PORT: number().required(),
+  DB_USERNAME: string().required(),
+  DB_PASSWORD: string().required(),
+  DB_DATABASE: string().required(),
 }).noUnknown();
 
 export const envs = envVarsSchema.validateSync(process.env);

@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ProvidersService } from './providers.service';
 import { Observable } from 'rxjs';
-import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { CreateProviderDto } from '@app/contracts/providers/DTO/create-provider.dto';
 import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.dto';
+import { Provider } from '@app/contracts/providers/entities/provider.entity';
+import { IdDto } from '@app/contracts/global-dto/id.dto';
 
 @Controller('providers')
 export class ProvidersController {
@@ -15,7 +16,7 @@ export class ProvidersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Observable<Provider> {
+  findOne(@Param() id: IdDto): Observable<Provider> {
     return this.providersService.findOne(id);
   }
 
@@ -26,7 +27,7 @@ export class ProvidersController {
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param() id: IdDto,
     @Body() updateProviderDto: UpdateProviderDto,
   ): Observable<Provider> {
     return this.providersService.update(id, updateProviderDto);
