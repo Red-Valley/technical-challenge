@@ -1,1 +1,0 @@
-export const PATIENTS_NAMESPACE = 'patients';
