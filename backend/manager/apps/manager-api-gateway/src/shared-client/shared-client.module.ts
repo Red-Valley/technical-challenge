@@ -15,7 +15,7 @@ export class SharedClientModule {
             options: {
               urls: [`amqp://${envs.RMQ_USER}:${envs.RMQ_PASSWORD}@${envs.RABBITMQ_URL}`],
               queue,
-              queueOptions: { durable: false },
+              queueOptions: { durable: true },
             },
           },
         ]),
