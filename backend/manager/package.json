@@ -12,6 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/manager/main",
+    "typeorm:statuses": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d apps/statuses/database/typeorm.config.ts migration:run",
     "start:gateway": "nest start manager-api-gateway --watch",
     "start:patients": "nest start patients --watch",
     "start:providers": "nest start providers --watch",
@@ -41,7 +42,6 @@
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.27",
     "yup": "^1.7.1"
   },
   "devDependencies": {
@@ -67,6 +67,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.27",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },

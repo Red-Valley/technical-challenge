@@ -32,7 +32,7 @@ export class StatusesDao {
 
   async isOrderUnique(parentId: string | null, order: number | null): Promise<boolean> {
 
-    if(!parentId || order === null) return true;
+    if(!parentId || !order) return true;
 
     const existingStatus = await this.statusesRepository.findOne({
       where: { parent_id: parentId, order },

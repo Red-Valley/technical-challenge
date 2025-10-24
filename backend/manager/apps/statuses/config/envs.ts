@@ -1,10 +1,10 @@
-import { PROVIDERS_NAMESPACE } from '@app/contracts/providers/providers.constants';
+import { STATUSES_NAMESPACE } from '@app/contracts/statuses/statuses.constants';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { number, object, string } from 'yup';
 
 config({
-  path: resolve(process.cwd(), `apps/${PROVIDERS_NAMESPACE}/.env`),
+  path: resolve(process.cwd(), `apps/${STATUSES_NAMESPACE}/.env`),
 });
 
 const envVarsSchema = object({
