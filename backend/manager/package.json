@@ -19,6 +19,7 @@
     "start:statuses": "nest start statuses --watch",
     "start:histories": "nest start status-histories --watch",
     "start:all": "concurrently \"npm run start:gateway\" \"npm run start:patients\" \"npm run start:providers\" \"npm run start:statuses\" \"npm run start:histories\"",
+    "create-envs": "bash ../../create-envs.sh",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
