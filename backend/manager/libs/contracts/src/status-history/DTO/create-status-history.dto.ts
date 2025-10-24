@@ -6,7 +6,4 @@ export class CreateStatusHistoryDto {
 
   @IsUUID()
   status_id: string;
-
-  @IsDateString()
-  changed_at: string;
 }

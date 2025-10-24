@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { StatusHistoryModule } from './../src/status-history.module';
+import { StatusHistoriesModule } from './../src/status-histories.module';
 
-describe('StatusHistoryController (e2e)', () => {
+describe('StatusHistoriesController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [StatusHistoryModule],
+      imports: [StatusHistoriesModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
