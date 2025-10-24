@@ -149,6 +149,18 @@ echo "Todos los archivos .env fueron creados correctamente."
 
  ```
 
+## Screenshots
+
+![Provider creation](./screenshots/provider-creation.png)
+
+![Patient creation](./screenshots/patient-creation.png)
+
+![Patient list](./screenshots/patient-list.png)
+
+![Provider list](./screenshots/provider-list.png)
+
+![Creation alert](./screenshots/creation-alert.png)
+
  
 ## Authors
 
