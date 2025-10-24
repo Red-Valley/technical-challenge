@@ -13,16 +13,26 @@ const sizes = {
 };
 
 const GenericDropdown = ({
+  form,
+  name,
   label,
   options = [],
-  value,
-  onChange,
   placeholder = "Seleccionar...",
   variant = "primary",
   size = "md",
   disabled = false,
   className = "",
+  persistence = null
 }) => {
+
+  const value = form.values[name];
+
+  const handleChange = (e) => {
+    form.setFieldValue(name, e.target.value);
+    if(!persistence) return;
+    persistence(e.target.value);
+  };
+
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
@@ -36,7 +46,7 @@ const GenericDropdown = ({
 
       <select
         value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
         disabled={disabled}
         className={`rounded-2xl border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none cursor-pointer transition-all duration-150 ${variants[variant]} ${sizes[size]} ${className}`}
       >
@@ -46,9 +56,9 @@ const GenericDropdown = ({
           </option>
         )}
 
-        {options.map((option, i) => (
-          <option key={i} value={option.value ?? option}>
-            {option.label ?? option}
+        {options.map((option) => (
+          <option key={option.id} value={option.id ?? option}>
+            {option.name || 'No Name'}
           </option>
         ))}
       </select>
@@ -57,6 +67,16 @@ const GenericDropdown = ({
 };
 
 GenericDropdown.propTypes = {
+  form: PropTypes.shape({
+      values: PropTypes.object.isRequired,
+      errors: PropTypes.object,
+      touched: PropTypes.object,
+      handleChange: PropTypes.func.isRequired,
+      handleBlur: PropTypes.func.isRequired,
+      setFieldValue: PropTypes.func,
+      setFieldTouched: PropTypes.func,
+    }).isRequired,
+    name: PropTypes.string.isRequired,
   label: PropTypes.string,
   options: PropTypes.arrayOf(
     PropTypes.oneOfType([
@@ -74,6 +94,7 @@ GenericDropdown.propTypes = {
   size: PropTypes.oneOf(["sm", "md", "lg"]),
   disabled: PropTypes.bool,
   className: PropTypes.string,
+  persistence: PropTypes.func,
 };
 
 export default GenericDropdown;

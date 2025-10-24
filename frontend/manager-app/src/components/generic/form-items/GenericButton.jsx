@@ -2,11 +2,11 @@ import PropTypes from 'prop-types'
 
 const GenericButton = ({
   children,
-  onClick,
   type = "button",
   disabled = false,
   variant = "primary",
   className = "",
+  onClick = () => {}
 }) => {
   const baseStyle =
     "px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none";

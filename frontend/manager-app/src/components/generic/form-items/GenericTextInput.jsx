@@ -5,8 +5,7 @@ const variants = {
     "border-gray-300 focus:border-blue-500 focus:ring-blue-400 text-gray-900",
   secondary:
     "border-gray-200 bg-gray-50 text-gray-700 focus:border-gray-400 focus:ring-gray-300",
-  danger:
-    "border-red-300 text-red-700 focus:border-red-500 focus:ring-red-400",
+  danger: "border-red-300 text-red-700 focus:border-red-500 focus:ring-red-400",
 };
 
 const sizes = {
@@ -25,16 +24,16 @@ const GenericTextInput = ({
   size = "md",
   disabled = false,
   className = "",
-  persistence = null
+  persistence = null,
 }) => {
   const value = form.values[name];
   const error = form.touched[name] && form.errors[name];
 
   const handleOnChange = (e) => {
     form.setFieldValue(name, e.target.value);
-    if(!persistence) return;
+    if (!persistence) return;
     persistence(e.target.value);
-  }
+  };
 
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -53,18 +52,22 @@ const GenericTextInput = ({
           name={name}
           type={dataType || "text"}
           value={value ?? ""}
-          onChange={(e) => handleOnChange(e)}
+          onChange={handleOnChange}
           onBlur={form.handleBlur}
           placeholder={placeholder || ""}
           disabled={disabled}
           autoComplete="off"
-          className={`w-full border bg-transparent focus:outline-none focus:ring-2 transition-all duration-150 ${variants[variant]} ${sizes[size]} ${
-            error ? "border-red-500 ring-red-200" : ""
-          } ${dataType === "percentage" ? "pr-8" : ""} ${className}`}
+          className={`w-full border bg-transparent focus:outline-none focus:ring-2 transition-all duration-150 ${
+            variants[variant]
+          } ${sizes[size]} ${error ? "border-red-500 ring-red-200" : ""} ${
+            dataType === "percentage" ? "pr-8" : ""
+          } ${className}`}
         />
       </div>
 
-      {error && <p className="text-sm text-red-500 mt-1">{form.errors[name]}</p>}
+      {error && (
+        <p className="text-sm text-red-500 mt-1">{form.errors[name]}</p>
+      )}
     </div>
   );
 };
@@ -86,7 +89,8 @@ GenericTextInput.propTypes = {
   variant: PropTypes.oneOf(["primary", "secondary", "danger"]),
   size: PropTypes.oneOf(["sm", "md", "lg"]),
   disabled: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
+  persistence: PropTypes.func,
 };
 
 export default GenericTextInput;
