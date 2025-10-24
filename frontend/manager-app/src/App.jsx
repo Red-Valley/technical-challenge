@@ -14,7 +14,9 @@ function App() {
   return (
     <Suspense fallback={<GenericProgressBar />}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <div className="w-full h-full bg-red-100">
+          <RouterProvider router={router} />
+        </div>
       </QueryClientProvider>
     </Suspense>
   );
