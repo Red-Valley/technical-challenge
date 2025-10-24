@@ -82,6 +82,15 @@
         "tsConfigPath": "libs/standard-response/tsconfig.lib.json"
       }
     },
+    "status-histories": {
+      "type": "application",
+      "root": "apps/status-histories",
+      "entryFile": "main",
+      "sourceRoot": "apps/status-histories/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/status-histories/tsconfig.app.json"
+      }
+    },
     "status-history": {
       "type": "application",
       "root": "apps/status-history",
