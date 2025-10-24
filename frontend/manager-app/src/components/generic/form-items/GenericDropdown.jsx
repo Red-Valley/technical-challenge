@@ -1,9 +1,12 @@
 import PropTypes from "prop-types";
 
 const variants = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300",
-  secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-200",
-  danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300",
+  primary:
+    "bg-white border-blue-300 text-gray-800 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 hover:border-blue-400 disabled:bg-gray-100 disabled:text-gray-400",
+  secondary:
+    "bg-gray-50 border-gray-300 text-gray-800 focus:border-gray-400 focus:ring-2 focus:ring-gray-200 hover:border-gray-400 disabled:bg-gray-100 disabled:text-gray-400",
+  danger:
+    "bg-white border-red-300 text-gray-800 focus:border-red-400 focus:ring-2 focus:ring-red-200 hover:border-red-400 disabled:bg-gray-100 disabled:text-gray-400",
 };
 
 const sizes = {
@@ -17,20 +20,18 @@ const GenericDropdown = ({
   name,
   label,
   options = [],
-  placeholder = "Seleccionar...",
+  placeholder = "Please select...",
   variant = "primary",
   size = "md",
   disabled = false,
   className = "",
-  persistence = null
+  persistence = null,
 }) => {
-
   const value = form.values[name];
 
   const handleChange = (e) => {
     form.setFieldValue(name, e.target.value);
-    if(!persistence) return;
-    persistence(e.target.value);
+    if (persistence) persistence(e.target.value);
   };
 
   return (
@@ -48,17 +49,16 @@ const GenericDropdown = ({
         value={value ?? ""}
         onChange={handleChange}
         disabled={disabled}
-        className={`rounded-2xl border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none cursor-pointer transition-all duration-150 ${variants[variant]} ${sizes[size]} ${className}`}
+        className={`rounded-lg border outline-none cursor-pointer transition-all duration-150 ${variants[variant]} ${sizes[size]} ${className}`}
       >
         {placeholder && (
           <option value="" disabled hidden>
             {placeholder}
           </option>
         )}
-
         {options.map((option) => (
-          <option key={option.id} value={option.id ?? option}>
-            {option.name || 'No Name'}
+          <option key={option.id ?? option} value={option.id ?? option}>
+            {option.name || option.label || "Sin nombre"}
           </option>
         ))}
       </select>
@@ -68,27 +68,21 @@ const GenericDropdown = ({
 
 GenericDropdown.propTypes = {
   form: PropTypes.shape({
-      values: PropTypes.object.isRequired,
-      errors: PropTypes.object,
-      touched: PropTypes.object,
-      handleChange: PropTypes.func.isRequired,
-      handleBlur: PropTypes.func.isRequired,
-      setFieldValue: PropTypes.func,
-      setFieldTouched: PropTypes.func,
-    }).isRequired,
-    name: PropTypes.string.isRequired,
+    values: PropTypes.object.isRequired,
+    setFieldValue: PropTypes.func,
+  }).isRequired,
+  name: PropTypes.string.isRequired,
   label: PropTypes.string,
   options: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        name: PropTypes.string,
         label: PropTypes.string,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       }),
     ])
   ).isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   variant: PropTypes.oneOf(["primary", "secondary", "danger"]),
   size: PropTypes.oneOf(["sm", "md", "lg"]),
