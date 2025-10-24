@@ -10,3 +10,12 @@ export const createProvider = async ({ queryKey }) => {
     throw error;
   }
 };
+
+export const getAllProviders = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/providers`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

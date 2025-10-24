@@ -1,12 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import GenericCardList from "../../../components/generic/ui/GenericCardList";
+import GenericProgressBar from "../../../components/generic/ui/GenericProgressBar";
+import { useProviderList } from "../../../hooks/dashboard/provider-list/useProviderList";
 
-const ProviderListPage = props => {
+const ProviderListPage = () => {
+  const { providerList, isSuccess } = useProviderList();
+
+  if (!isSuccess) return <GenericProgressBar />;
+
   return (
-    <div>ProviderListPage</div>
-  )
-}
+    <GenericCardList
+      title="Provider"
+      items={providerList}
+    />
+  );
+};
 
-ProviderListPage.propTypes = {}
-
-export default ProviderListPage
+export default ProviderListPage;
