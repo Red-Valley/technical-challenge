@@ -7,6 +7,8 @@ import { LOGGER_SERVICE_SYMBOL } from '@app/logger/constants/logger-symbol.const
 async function bootstrap() {
   const app = await NestFactory.create(ManagerApiGatewayModule);
 
+  app.enableCors();
+
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
   }));
