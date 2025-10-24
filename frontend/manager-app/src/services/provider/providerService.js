@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { BASE_URL } from '../../../config/envs';
 
-export const createProvider = async ({ queryKey }) => {
-  const [_, params] = queryKey;
+export const createProvider = async (values) => {
   try {
-    const response = await axios.post(`${BASE_URL}/providers`, params);
+    const response = await axios.post(`${BASE_URL}/providers`, values);
     return  response.data;
   } catch (error) {
     throw error;
