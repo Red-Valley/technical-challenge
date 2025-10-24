@@ -4,15 +4,15 @@ import { encryptLocalStorage } from '../helpers/encryptLocalStorage';
 
 const storeApi = (set) => ({
   id: "",
-  fullName: "",
+  full_name: "",
   specialty: "",
 
   setId: (id) => {
     set({ id });
   },
 
-  setFullName: (fullName) => {
-    set({ fullName });
+  setFullName: (full_name) => {
+    set({ full_name });
   },
 
   setSpecialty: (specialty) => {
@@ -20,7 +20,7 @@ const storeApi = (set) => ({
   },
 
   clearMenuData: () => {
-    set({ id: "", fullName: "", specialty: "" });
+    set({ id: "", full_name: "", specialty: "" });
   }
 });
 
