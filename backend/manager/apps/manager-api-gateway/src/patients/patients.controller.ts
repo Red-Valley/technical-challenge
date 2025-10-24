@@ -7,7 +7,8 @@ import {
   Param, 
   Body,
   Inject,
-  Logger
+  Logger,
+  BadRequestException
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from '@app/contracts/patients/DTO/create-patient.dto';
@@ -76,10 +77,7 @@ export class PatientsController {
       );
     } catch (error) {
       this.logger.error('Error al crear el paciente: ' + error.message);
-      return standardResponse(
-        'Falló la creación del paciente',
-        null
-      );
+      throw new BadRequestException('Falló la creación del paciente');
     }
   }
 
