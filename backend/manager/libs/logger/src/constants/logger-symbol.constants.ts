@@ -1,0 +1,1 @@
+export const LOGGER_SERVICE_SYMBOL = Symbol('LOGGER_SERVICE');

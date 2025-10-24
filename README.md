@@ -1,138 +1,167 @@
-## Technical Challenge
 
-### Background
+# Manager
 
-At VIP Medical Group, we are building a new internal module for our Medwork platform—a system that allows our staff to register patients, assign them to doctors (providers), and track their clinical status throughout their care journey.
+This repository contains a microservices system with a frontend in React/Vite and a backend in NestJS, using PostgreSQL and RabbitMQ as supporting services.
 
-In this challenge, you’ll simulate part of this module by creating a full-stack application that allows managing patients, providers, and clinical statuses with a parent-child hierarchy.
+## Architecture and Design Decisions
 
-We are **not evaluating specific tools or patterns**. We simply want to understand how you think, how you code, and how you approach real-world problems. Be yourself.
+- Microservices: Each backend module runs as an independent microservice.
 
+- RabbitMQ: Used for asynchronous communication and background task processing.
 
+- PostgreSQL: Centralized relational database for all services.
 
-### What You Need to Build
+- Frontend: Vite application for fast reloads and agile development.
 
-A functional **full stack application** with the ability to:
+## Prerequisites
 
-1. Create patients and providers
-2. Assign a provider to a patient
-3. Change the patient’s clinical status (with hierarchy)
-4. Display the status change history of a patient
+- Docker and Docker Compose installed
+- Node.js version 18 or higher
+- npm
 
+## Steps to Run the Project Locally
 
+1. Generate the environment files
 
-### Database Schema
+- Copy the create-envs.sh file to the root of the repository
 
-You must implement these 4 tables exactly as described below:
+- Run the following command in the terminal. This will create all necessary .env files (content of create-envs.sh file is at the end of this readme):
 
-#### 1. `patients`
-
-| Field        | Type      |
-| ------------ | --------- |
-| id           | UUID      |
-| full\_name   | string    |
-| email        | string    |
-| phone        | string    |
-| provider\_id | UUID (FK) |
-| status\_id   | UUID (FK) |
-| created\_at  | datetime  |
-
-#### 2. `providers`
-
-| Field       | Type     |
-| ----------- | -------- |
-| id          | UUID     |
-| full\_name  | string   |
-| specialty   | string   |
-| created\_at | datetime |
-
-#### 3. `statuses`
-
-| Field      | Type                            |
-| ---------- | ------------------------------- |
-| id         | UUID                            |
-| name       | string                          |
-| parent\_id | UUID (nullable, FK to statuses) |
-| order      | integer                         |
-
-> This table allows parent-child status relationships.
-
-#### 4. `status_history`
-
-| Field       | Type      |
-| ----------- | --------- |
-| id          | UUID      |
-| patient\_id | UUID (FK) |
-| status\_id  | UUID (FK) |
-| changed\_at | datetime  |
+`` ./create-envs.sh ``
 
 
+2. Start backend services
 
-### Preloaded Statuses
+- Go to the backend folder:
 
-These statuses must be preloaded in the database:
+`` cd backend/manager ``
 
-* `Scheduled`
+- Start the RabbitMQ and PostgreSQL images:
 
-  * `Checked-In`
+`` docker compose -f docker-compose.dev.yml up -d ``
 
-    * `In Consultation`
-    * `Cancelled`
-  * `No-Show`
+- Install backend dependencies:
+`` npm install ``
 
-You can use a seed script or migrations to insert them.
+- Run the database migrations:
+`` npm run typeorm:statuses ``
 
+- Start all microservices:
+`` npm run start:all ``
 
+3. Start the frontend
 
-### Tech Stack
+- Open another terminal and go to the frontend folder:
+`` cd frontend/manager-app ``
 
-#### Backend
+- Install frontend dependencies:
+`` npm install ``
 
-* Language: TypeScript
-* Framework: **NestJS** or **Express**
-* Database: **PostgreSQL**, **MySQL**, or **MongoDB**
-* If you prefer, you may separate logic into small services (e.g., `patients-service`, `statuses-service`)
-
-  * Use **HTTP**, **events**, or **gRPC** for inter-service communication
-  * If using multiple services, you must include an **API Gateway**
-
-#### Frontend
-
-* Framework: **React** (Vite)
-* Styling: **TailwindCSS**
-* State management: **Redux Toolkit** or **Zustand**
-* Data fetching: **Tanstack Query**
+- Start the frontend with Vite:
+`` npm run dev ``
 
 
+### Recommended content of ./create-envs.sh
 
-### Required Screens
+``` 
+#!/bin/bash
 
-You should include the following screens:
+# Backend manager root .env
+cat > backend/manager/.env <<EOL
+DATABASE_URL="file:./dev.db"
 
-1. Patient creation form
-2. Provider creation form
-3. Patient list (showing status and assigned provider)
-4. Patient status update control (e.g., dropdown)
-5. Patient status history (as timeline or list)
+RABBITMQ_USER=marioch
+RABBITMQ_PASS=marioch123
+POSTGRES_USER=marioch
+POSTGRES_PASSWORD=marioch123
+POSTGRES_PORT=5437
+EOL
 
-> **Optional screen:** Provider list view.
+# Backend manager-api-gateway .env
+cat > backend/manager/apps/manager-api-gateway/.env <<EOL
+NODE_ENV=dev
+HOST=0.0.0.0
+PORT=3000
+RMQ_USER=marioch
+RMQ_PASSWORD=marioch123
+RABBITMQ_URL=localhost:5672
+EOL
 
+# Backend patients .env
+cat > backend/manager/apps/patients/.env <<EOL
+RMQ_USER=marioch
+RMQ_PASSWORD=marioch123
+RABBITMQ_URL=localhost:5672
 
+DB_HOST=localhost
+DB_PORT=5437
+DB_USERNAME=marioch
+DB_PASSWORD=marioch123
+DB_DATABASE=patient_db
+EOL
 
-### Submission Instructions
+# Backend providers .env
+cat > backend/manager/apps/providers/.env <<EOL
+RMQ_USER=marioch
+RMQ_PASSWORD=marioch123
+RABBITMQ_URL=localhost:5672
 
-* You will receive a Git repository link for the base project.
-* **Fork the repository**, complete your work in a new branch, and **submit a pull request** to share your solution.
-* Include a `README.md` with:
+DB_HOST=localhost
+DB_PORT=5437
+DB_USERNAME=marioch
+DB_PASSWORD=marioch123
+DB_DATABASE=provider_db
+EOL
 
-  * Clear instructions to run the project locally
-  * A short explanation of your architecture or design decisions
-  * A seed script to preload providers and statuses
+# Backend status-histories .env
+cat > backend/manager/apps/status-histories/.env <<EOL
+RMQ_USER=marioch
+RMQ_PASSWORD=marioch123
+RABBITMQ_URL=localhost:5672
 
+DB_HOST=localhost
+DB_PORT=5437
+DB_USERNAME=marioch
+DB_PASSWORD=marioch123
+DB_DATABASE=status_history_db
+EOL
 
+# Backend statuses .env
+cat > backend/manager/apps/statuses/.env <<EOL
+RMQ_USER=marioch
+RMQ_PASSWORD=marioch123
+RABBITMQ_URL=localhost:5672
 
-### Time Expectation
+DB_HOST=localhost
+DB_PORT=5437
+DB_USERNAME=marioch
+DB_PASSWORD=marioch123
+DB_DATABASE=status_db
+EOL
 
-You should spend no more than **8 hours** on this task.
+# Frontend .env.local
+cat > frontend/manager-app/.env.local <<EOL
+VITE_STAGE=dev
+VITE_API_URL=http://localhost:3000
+EOL
 
-Don’t worry if you can’t finish everything. What matters most is **how far you get** and **how you approach the problem**.
+echo "Todos los archivos .env fueron creados correctamente."
+
+ ```
+
+## Screenshots
+
+![Provider creation](./screenshots/provider-creation.png)
+
+![Patient creation](./screenshots/patient-creation.png)
+
+![Patient list](./screenshots/patient-list.png)
+
+![Provider list](./screenshots/provider-list.png)
+
+![Creation alert](./screenshots/creation-alert.png)
+
+ 
+## Authors
+
+- [@MarioCuberos](https://www.linkedin.com/in/mario-enrique-cuberos-hernandez/)

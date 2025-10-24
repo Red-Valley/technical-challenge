@@ -1,0 +1,11 @@
+CREATE DATABASE manager_db;
+CREATE DATABASE provider_db;
+CREATE DATABASE patient_db;
+CREATE DATABASE status_db;
+CREATE DATABASE status_history_db;
+
+GRANT ALL PRIVILEGES ON DATABASE manager_db TO marioch;
+GRANT ALL PRIVILEGES ON DATABASE provider_db TO marioch;
+GRANT ALL PRIVILEGES ON DATABASE patient_db TO marioch;
+GRANT ALL PRIVILEGES ON DATABASE status_db TO marioch;
+GRANT ALL PRIVILEGES ON DATABASE status_history_db TO marioch;
