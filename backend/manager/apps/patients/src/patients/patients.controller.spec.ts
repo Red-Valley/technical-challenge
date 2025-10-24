@@ -3,20 +3,18 @@ import { PatientsController } from './patients.controller';
 import { PatientsService } from './patients.service';
 
 describe('PatientsController', () => {
-  let patientsController: PatientsController;
+  let controller: PatientsController;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [PatientsController],
       providers: [PatientsService],
     }).compile();
 
-    patientsController = app.get<PatientsController>(PatientsController);
+    controller = module.get<PatientsController>(PatientsController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(patientsController.getHello()).toBe('Hello World!');
-    });
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 });

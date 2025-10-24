@@ -4,32 +4,31 @@ import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ProvidersDao } from './providers.dao';
 
 @Injectable()
 export class ProvidersService {
   constructor(
-    @InjectRepository(Provider)
-    private providersRepository: Repository<Provider>,
+    private providersDao: ProvidersDao
   ) {}
 
   create(createProviderDto: CreateProviderDto) {
-    const provider = this.providersRepository.create(createProviderDto);
-    return this.providersRepository.save(provider);
+    return this.providersDao.create(createProviderDto);
   }
 
   findAll() {
-    return this.providersRepository.find();
+    return this.providersDao.findAll();
   }
 
   findOne(id: string) {
-    return this.providersRepository.findOne({ where: { id } });
+    return this.providersDao.findOne(id);
   }
 
-  update(id: string, updateProviderDto: UpdateProviderDto) {
-    return this.providersRepository.update(id, updateProviderDto);
+  async update(id: string, updateProviderDto: UpdateProviderDto) {
+    return this.providersDao.update(id, updateProviderDto);
   }
 
-  remove(id: string) {
-    return this.providersRepository.delete(id);
+  async remove(id: string) {
+    return this.providersDao.remove(id);
   }
 }
