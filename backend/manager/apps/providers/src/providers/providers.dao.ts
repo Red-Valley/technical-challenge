@@ -1,4 +1,5 @@
 import { CreateProviderDto } from '@app/contracts/providers/DTO/create-provider.dto';
+import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.dto';
 import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,7 +26,7 @@ export class ProvidersDao {
     return this.providersRepository.findOne({ where: { id } });
   }
 
-  async update(id: string, provider: Partial<Provider>) {
+  async update(id: string, provider: UpdateProviderDto) {
     const updatedProvider = await this.providersRepository.update(id, provider);
     return !!updatedProvider.affected;
   }

@@ -1,9 +1,6 @@
 import { CreateProviderDto } from '@app/contracts/providers/DTO/create-provider.dto';
 import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.dto';
-import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { ProvidersDao } from './providers.dao';
 
 @Injectable()

@@ -4,15 +4,11 @@ import { UpdateProviderDto } from '@app/contracts/providers/DTO/update-provider.
 import { Provider } from '@app/contracts/providers/entities/provider.entity';
 import { PROVIDERS_PATTERNS } from '@app/contracts/providers/patterns/providers.patterns';
 import { PROVIDERS_SERVICE_NAME } from '@app/contracts/providers/providers.constants';
-import { standardResponse } from '@app/standard-response';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable()
 export class ProvidersService {
-
-  private readonly logger = new Logger();
 
   constructor(
     @Inject(PROVIDERS_SERVICE_NAME) private readonly client: ClientProxy,
